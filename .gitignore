@@ -3,7 +3,7 @@
 *.class
 
 #Maven
-pom.xml
+*.xml
 
 # Log file
 *.log
