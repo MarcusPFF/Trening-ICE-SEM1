@@ -1,0 +1,93 @@
+@startuml
+!pragma layout smetana
+
+main --> loginPage
+loginPage --> menu
+menu *-- homePage
+menu *-- workoutPage
+menu *-- accountPage
+menu *-- orderTren
+account --> accountPage
+workoutPage <-- exercises
+"util" --* menu
+"util" --* loginPage
+sets --* exercises
+
+class main {
++ static void main(String[] args)
++ loginPage login = new loginPage
++ login.runLogin()
+}
+
+class loginPage {
+- String username
+- String password
+- account acc
+- menu menu
+- accountMapper accmap
+
+' Constructor
++ loginPage()
+
+' Metoder
++ void runLogin()
++ void createAccount()[menu.runMenu()]
++ void login()[menu.runMenu()]
+
+}
+class menu
+class homePage
+class workoutPage
+class accountPage {
+
++ void displayAccountInfo()
++ void changePassword()
++ void setMeasurements()([setInputHeight, setInputWeight])
++ void logOut()
+
+}
+class orderTren
+class exercises {
+- String exerciseName
+- String note
+- List<Sets> exercise
+- Sets set
+
++ exercises(String exerciseName, List<Sets> exercise, String note, )
+
+}
+
+class account {
+- String username
+- String password
+- float inputWeight
+- float inputHeight
+
++ account(String username, String password, float inputWeight, float inputHeight
+
++ Getter & Setter()
+
+}
+class sets {
+- int reps
+- float kg
+
++ Sets(String exerciseName, int reps, float kg)
+
++ Getter & Setter()
+}
+
+package "util" {
+class accountMapper {
+- List<account> account
+
++List<account> loadAccountData()
++List<account> saveAccountData()
+}
+
+class exercisesMapper {
++ List<Exercise> loadExercisesData()
++ void saveExercisesData(List<Exercise> exercise)
+}
+}
+@enduml

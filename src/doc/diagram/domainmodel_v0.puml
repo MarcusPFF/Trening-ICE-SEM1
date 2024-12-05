@@ -1,0 +1,20 @@
+@startuml
+!pragma layout smetana
+
+main --> loginPage
+loginPage --> menu
+menu *-- homePage
+menu *-- workoutPage
+menu *-- accountPage
+
+account --> accountPage
+class main
+workoutPage <-- exercises
+class loginPage
+class menu
+class homePage
+class workoutPage
+class accountPage
+class exercises
+class account
+@enduml
