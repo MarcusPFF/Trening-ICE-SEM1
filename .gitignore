@@ -2,7 +2,8 @@
 # Compiled class file
 *.class
 
-.xml
+#Maven
+pom.xml
 
 # Log file
 *.log
