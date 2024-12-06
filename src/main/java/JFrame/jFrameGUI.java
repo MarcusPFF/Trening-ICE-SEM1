@@ -77,7 +77,6 @@ public class jFrameGUI extends JFrame {
         JButton buytren = createModernButton("Shop now!");
         menu3.add(buytren, BorderLayout.SOUTH);
 
-
         // Vi tilføjer menu1,2,3,4 til rightpanel
         rightPanel.add(menu1, "Menu");
         rightPanel.add(menu2, "Workout");
