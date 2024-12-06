@@ -1,70 +1,139 @@
 @startuml
 !pragma layout smetana
 
-main --> loginPage
-loginPage --> menu
-menu *-- homePage
+main --> jFrameGUI
+jFrameGUI *-- loginPage
+loginPage *-- menu
+currentTraining *-- homePage
 menu *-- workoutPage
 menu *-- accountPage
 menu *-- orderTren
-account --> accountPage
-workoutPage <-- exercises
-"util" --* menu
-"util" --* loginPage
+account --* accountPage
+currentTraining *-- exercises
+"util" *--* menu
+"util" --* exercises
 sets --* exercises
 
 class main {
+package Jframe.JframeGUI
+- jFrameGUI jFrameGUI = new jFrameGUI();
 + static void main(String[] args)
-+ loginPage login = new loginPage
-+ login.runLogin()
+jFrameGUI.launchGUI()
+
+
+
+}
+package Jframe{
+class jFrameGUI extends Jframe  {
++ void launchGUI()
++ void createGUI()
+- JButton createModernButton(String text)
+- JPanel createModernPanel(String labelText)
+}
 }
 
 class loginPage {
-- String username
-- String password
-- account acc
 - menu menu
-- accountMapper accmap
 
 ' Constructor
 + loginPage()
 
 ' Metoder
-+ void runLogin()
-+ void createAccount()[menu.runMenu()]
-+ void login()[menu.runMenu()]
++ void displayLoginPage()
++ void createAccount()[menu.runAlways()]
++ void login()[menu.runAlways()]
 
 }
-class menu
-class homePage
-class workoutPage
-class accountPage {
+class menu {
+- workoutPage wp;
+- orderTren ot;
+- accountPage ap;
+- accountMapper am;
+- exercisesMapper em;
++ menu()
++ void runAlways()
+ wp.ct.hp.homePage()
+ wp.workoutPage()
+ ot.orderTren()
+ ap.accountPage()
 
+
+}
+class homePage {
++ homePage()
++ void editTraining()
++ void displayTrainingHistory()
+}
+class workoutPage {
+- currentTraining ct
+- exercisesMapper em
++ workoutPage()
+ct.startTraining()
+
+}
+
+workoutPage *-- currentTraining
+
+class currentTraining{
+- exercises ex
+- homePage hp
++ currentTraining()
++ void startTraining(String )
++ void endTraining()
++ int editReps()
++ float editKg()
++ String editNote()
++ Getter & Setter()
+}
+
+class accountPage {
+- account acc
++ accountPage()
 + void displayAccountInfo()
 + void changePassword()
-+ void setMeasurements()([setInputHeight, setInputWeight])
++ void setMeasurements()([acc.setInputHeight, acc.setInputWeight])
 + void logOut()
++ validateEmail()
++ validatePassword()
 
 }
-class orderTren
+class orderTren {
++ orderTren()
++ void orderTren()
+
+}
 class exercises {
+- sets sets
++ exercises(String exerciseName, list<sets> exercise, String note, )
 - String exerciseName
 - String note
-- List<Sets> exercise
-- Sets set
+- List<sets> exercise
+- List<exercises> trainingProgram
 
-+ exercises(String exerciseName, List<Sets> exercise, String note, )
+
++ void addSetsToExercise()
+- sets set1 = new sets()
+- sets set2 = new sets()
+- sets set3 = new sets()
+- exercise.add(set1)
+- exercise.add(set2)
+- exercise.add(set3)
++ void addExerciseToProgram()
+- trainingProgram.add(exercise)
+
+
+
+
 
 }
 
 class account {
-- String username
+- String email
 - String password
 - float inputWeight
 - float inputHeight
 
-+ account(String username, String password, float inputWeight, float inputHeight
-
++ account(String email, String password, float inputWeight, float inputHeight
 + Getter & Setter()
 
 }
@@ -72,13 +141,13 @@ class sets {
 - int reps
 - float kg
 
-+ Sets(String exerciseName, int reps, float kg)
-
++ sets(int reps, float kg)
 + Getter & Setter()
 }
 
 package "util" {
 class accountMapper {
++ accountMapper()
 - List<account> account
 
 +List<account> loadAccountData()
@@ -86,8 +155,9 @@ class accountMapper {
 }
 
 class exercisesMapper {
-+ List<Exercise> loadExercisesData()
-+ void saveExercisesData(List<Exercise> exercise)
++ exerciseMapper()
++ List<exercises> loadExercisesData()
++ List<exercises> saveExercisesData()
 }
 }
 @enduml

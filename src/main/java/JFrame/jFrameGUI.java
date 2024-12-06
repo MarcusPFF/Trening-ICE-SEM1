@@ -12,7 +12,7 @@ public class jFrameGUI extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                createGUI();
+               createGUI();
             }
         });
     }
@@ -64,7 +64,7 @@ public class jFrameGUI extends JFrame {
         JPanel rightPanel = new JPanel(Layout);
 
         // Ligesom før så er den her metode "createModernPanel" lavet til at man kan style en side pæn.
-        JPanel menu1 = createModernPanel("Welcome to Home page!");
+        JPanel menu1 = createModernPanel("Welcome to home page!");
         JPanel menu2 = createModernPanel("Start a workout");
         JPanel menu3 = createModernPanel("Order your Tren now!");
         JPanel menu4 = createModernPanel("Manage your account.");
@@ -123,6 +123,13 @@ public class jFrameGUI extends JFrame {
                 }
             }
         });
+
+        //Eksempel
+        /*eksempelPåKnap.addActionListener(new ActionListener() {
+           StartTraining()
+        });
+
+         */
 
         //Tilføjer sidemenu og rightpanel til borderLayout.
         add(sideMenu, BorderLayout.WEST);

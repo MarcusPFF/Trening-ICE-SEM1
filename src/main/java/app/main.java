@@ -1,10 +1,10 @@
 package app;
 
-import JFrame.gui;
+import JFrame.jFrameGUI;
 
 public class main {
    public static void main(String[] args) {
-        gui gui = new gui();
-        gui.runGUI();
+       jFrameGUI jFrameGUI = new jFrameGUI();
+       jFrameGUI.launchGUI();
     }
 }

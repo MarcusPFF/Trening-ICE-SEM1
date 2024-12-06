@@ -17,4 +17,14 @@ class workoutPage
 class accountPage
 class exercises
 class account
+
+package jFrame {
+class jFrameGUI extends jFrame
+}
+
+package util {
+class accountMapper()
+class exercisesMapper()
+}
+
 @enduml
