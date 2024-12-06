@@ -17,6 +17,7 @@ class main {
 + static void main(String[] args)
 + loginPage login = new loginPage
 + login.runLogin()
+
 }
 
 class loginPage {
@@ -35,19 +36,43 @@ class loginPage {
 + void login()[menu.runMenu()]
 
 }
-class menu
-class homePage
-class workoutPage
-class accountPage {
+class menu {
+- homePage hp;
+- workoutPage wp;
+- orderTren ot;
+- accountPage ap;
++ menu()
++ void runAlways()
 
+}
+class homePage {
++ homePage()
++ void displayHistory()
+}
+class workoutPage {
++ workoutPage()
++ void startTraining()
++ void newProgram()
++ void existingProgram()
++ void endTraining()
++ void editTraining()
++ Getter & Setter()
+}
+class accountPage {
++ accountPage()
 + void displayAccountInfo()
 + void changePassword()
 + void setMeasurements()([setInputHeight, setInputWeight])
 + void logOut()
 
 }
-class orderTren
+class orderTren {
++ orderTren()
++ void orderTren()
+
+}
 class exercises {
++ exercises()
 - String exerciseName
 - String note
 - List<Sets> exercise
@@ -72,13 +97,14 @@ class sets {
 - int reps
 - float kg
 
-+ Sets(String exerciseName, int reps, float kg)
++ sets(String exerciseName, int reps, float kg)
 
 + Getter & Setter()
 }
 
 package "util" {
 class accountMapper {
++ accountMapper()
 - List<account> account
 
 +List<account> loadAccountData()
@@ -86,6 +112,7 @@ class accountMapper {
 }
 
 class exercisesMapper {
++ exerciseMapper()
 + List<Exercise> loadExercisesData()
 + void saveExercisesData(List<Exercise> exercise)
 }
