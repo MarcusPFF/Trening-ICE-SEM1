@@ -15,7 +15,7 @@ sets --* exercises
 
 class main {
 + static void main(String[] args)
-+ loginPage login = new loginPage
+- loginPage login;
 + login.runLogin()
 
 }
@@ -25,7 +25,7 @@ class loginPage {
 - String password
 - account acc
 - menu menu
-- accountMapper accmap
+- accountMapper am
 
 ' Constructor
 + loginPage()
@@ -43,21 +43,36 @@ class menu {
 - accountPage ap;
 + menu()
 + void runAlways()
++  homePage()
++  workoutPage()
++  orderTren()
++  accountPage()
+
 
 }
 class homePage {
 + homePage()
-+ void displayHistory()
++ void displayTrainingHistory()
 }
 class workoutPage {
+- currentTraining ct
+- exercisesMapper em
 + workoutPage()
++ startTraining()
+
+}
+
+workoutPage *-- currentTraining
+
+class currentTraining{
 + void startTraining()
-+ void newProgram()
-+ void existingProgram()
++ void newTrainingProgram()
++ void existingTrainingProgram()
 + void endTraining()
 + void editTraining()
 + Getter & Setter()
 }
+
 class accountPage {
 + accountPage()
 + void displayAccountInfo()
@@ -75,10 +90,22 @@ class exercises {
 + exercises()
 - String exerciseName
 - String note
-- List<Sets> exercise
-- Sets set
+- List<sets> exercise
 
-+ exercises(String exerciseName, List<Sets> exercise, String note, )
+
++ void addSetsToExercise()
+- sets set1 = new sets()
+- sets set2 = new sets()
+- sets set3 = new sets()
+- exercise.add(set1)
+- exercise.add(set2)
+- exercise.add(set3)
+
+
+
+
++ exercises(String exerciseName, list<sets> exercise, String note, )
+
 
 }
 
@@ -89,7 +116,6 @@ class account {
 - float inputHeight
 
 + account(String username, String password, float inputWeight, float inputHeight
-
 + Getter & Setter()
 
 }
@@ -97,7 +123,7 @@ class sets {
 - int reps
 - float kg
 
-+ sets(String exerciseName, int reps, float kg)
++ sets(int reps, float kg)
 
 + Getter & Setter()
 }
@@ -113,8 +139,8 @@ class accountMapper {
 
 class exercisesMapper {
 + exerciseMapper()
-+ List<Exercise> loadExercisesData()
-+ void saveExercisesData(List<Exercise> exercise)
++ List<exercises> loadExercisesData()
++ List<exercises> saveExercisesData()
 }
 }
 @enduml
