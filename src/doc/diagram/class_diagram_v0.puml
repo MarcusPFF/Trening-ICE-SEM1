@@ -1,93 +1,168 @@
 @startuml
 !pragma layout smetana
 
-main --> loginPage
-loginPage --> menu
-menu *-- homePage
-menu *-- workoutPage
-menu *-- accountPage
-menu *-- orderTren
-account --> accountPage
-workoutPage <-- exercises
-"util" --* menu
-"util" --* loginPage
-sets --* exercises
+Main --> JFrameGUI
+JFrameGUI *-- LoginPage
+LoginPage *-- Menu
+CurrentTrainingPage *-- HomePage
+Menu *-- WorkoutPage
+Menu *-- AccountPage
+Menu *-- OrderTrenPage
+Account --* AccountPage
+CurrentTrainingPage *-- Exercises
+"util" *--* Menu
+"util" --* Exercises
+Sets --* Exercises
 
-class main {
+class Main {
+package JFrame.JFrameGUI
+- JFrameGUI JFrameGUI = new JFrameGUI();
 + static void main(String[] args)
-+ loginPage login = new loginPage
-+ login.runLogin()
+JFrameGUI.launchGUI()
+
+}
+package JFrame{
+class JFrameGUI extends JFrame  {
++ void launchGUI()
++ void createMenuGUI()
++ void createLoginGUI()
++ void createWorkoutGUI()
++ void currentTrainingGUI()
++ void orderTrenPage()
++ void homePage()
++ void accountPage()
+
+- JButton createModernButton(String text)
+- JPanel createModernPanel(String labelText)
+}
 }
 
-class loginPage {
-- String username
-- String password
-- account acc
-- menu menu
-- accountMapper accmap
+class LoginPage {
+- Menu menu
 
 ' Constructor
 + loginPage()
 
 ' Metoder
-+ void runLogin()
-+ void createAccount()[menu.runMenu()]
-+ void login()[menu.runMenu()]
++ void displayLoginPage()
++ void createAccount()[menu.runAlways()]
++ void login()[menu.runAlways()]
++ validateEmail()
++ validatePassword()
 
 }
-class menu
-class homePage
-class workoutPage
-class accountPage {
+class Menu {
+- WorkoutPage wp;
+- OrderTrenPage ot;
+- AccountPage ap;
+- AccountMapper am;
+- ExercisesMapper em;
++ menu()
++ void runAlways()
+ wp.ct.hp.HomePage()
+ wp.WorkoutPage()
+ ot.OrderTrenPage()
+ ap.AccountPage()
 
+
+}
+class HomePage{
++ homePage()
++ void editTraining()
++ void displayTrainingHistory()
+}
+class WorkoutPage {
+- CurrentTrainingPage ct
+- ExercisesMapper em
++ workoutPage()
+ct.StartTraining()
+
+}
+
+WorkoutPage *-- CurrentTrainingPage
+
+class CurrentTrainingPage{
+- Exercises ex
+- HomePage hp
++ currentTraining()
++ void startTraining(String )
++ void endTraining()
++ int editReps()
++ float editKg()
++ String editNote()
++ Getter & Setter()
+}
+
+class AccountPage {
+- Account acc
++ accountPage()
 + void displayAccountInfo()
-+ void changePassword()
-+ void setMeasurements()([setInputHeight, setInputWeight])
++ void setMeasurements()([acc.setInputHeight, acc.setInputWeight])
 + void logOut()
 
 }
-class orderTren
-class exercises {
+class OrderTrenPage {
++ orderTrenPage()
++ void orderTren()
+
+}
+class Exercises {
+- ExerciseMapper em
+- Sets sets
++ exercises(String exerciseName, list<sets> exercise, String note, )
 - String exerciseName
 - String note
-- List<Sets> exercise
-- Sets set
+- List<sets> exercise
+- List<exercises> trainingProgram
 
-+ exercises(String exerciseName, List<Sets> exercise, String note, )
+
++ void addSetsToExercise()
+- Sets set1 = new sets()
+- Sets set2 = new sets()
+- Sets set3 = new sets()
+- exercise.add(set1)
+- exercise.add(set2)
+- exercise.add(set3)
++ void addExerciseToProgram()
+- trainingProgram.add(exercise)
+
+
+
+
 
 }
 
-class account {
-- String username
+class Account {
+- String email
 - String password
 - float inputWeight
 - float inputHeight
 
-+ account(String username, String password, float inputWeight, float inputHeight
-
++ account(String email, String password, float inputWeight, float inputHeight
 + Getter & Setter()
 
 }
-class sets {
+class Sets {
 - int reps
 - float kg
 
-+ Sets(String exerciseName, int reps, float kg)
-
++ sets(int reps, float kg)
 + Getter & Setter()
 }
 
 package "util" {
-class accountMapper {
+class AccountMapper {
++ accountMapper()
 - List<account> account
 
 +List<account> loadAccountData()
 +List<account> saveAccountData()
 }
 
-class exercisesMapper {
-+ List<Exercise> loadExercisesData()
-+ void saveExercisesData(List<Exercise> exercise)
+class ExercisesMapper {
++ exerciseMapper()
++ List<exercises> loadExercisesData()
++ List<exercises> saveExercisesData()
 }
 }
 @enduml
