@@ -1,18 +1,18 @@
 @startuml
 !pragma layout smetana
 
-main --> jFrameGUI
-jFrameGUI *-- loginPage
-loginPage *-- menu
-currentTraining *-- homePage
-menu *-- workoutPage
-menu *-- accountPage
-menu *-- orderTren
-account --* accountPage
-currentTraining *-- exercises
-"util" *--* menu
-"util" --* exercises
-sets --* exercises
+Main --> JFrameGUI
+JFrameGUI *-- LoginPage
+LoginPage *-- Menu
+CurrentTrainingPage *-- HomePage
+Menu *-- WorkoutPage
+Menu *-- AccountPage
+Menu *-- OrderTrenPage
+Account --* AccountPage
+CurrentTrainingPage *-- Exercises
+"util" *--* Menu
+"util" --* Exercises
+Sets --* Exercises
 
 class main {
 package Jframe.JframeGUI
@@ -26,7 +26,14 @@ jFrameGUI.launchGUI()
 package Jframe{
 class jFrameGUI extends Jframe  {
 + void launchGUI()
-+ void createGUI()
++ void createMenuGUI()
++ void createLoginGUI()
++ void createWorkoutGUI()
++ void currentTrainingGUI()
++ void orderTrenPage()
++ void homePage()
++ void accountPage()
+
 - JButton createModernButton(String text)
 - JPanel createModernPanel(String labelText)
 }
@@ -44,39 +51,39 @@ class loginPage {
 + void login()[menu.runAlways()]
 
 }
-class menu {
-- workoutPage wp;
-- orderTren ot;
-- accountPage ap;
-- accountMapper am;
-- exercisesMapper em;
+class Menu {
+- WorkoutPage wp;
+- OrderTrenPage ot;
+- AccountPage ap;
+- AccountMapper am;
+- ExercisesMapper em;
 + menu()
 + void runAlways()
- wp.ct.hp.homePage()
- wp.workoutPage()
- ot.orderTren()
- ap.accountPage()
+ wp.ct.hp.HomePage()
+ wp.WorkoutPage()
+ ot.OrderTrenPage()
+ ap.AccountPage()
 
 
 }
-class homePage {
+class HomePage{
 + homePage()
 + void editTraining()
 + void displayTrainingHistory()
 }
-class workoutPage {
-- currentTraining ct
-- exercisesMapper em
+class WorkoutPage {
+- CurrentTrainingPage ct
+- ExercisesMapper em
 + workoutPage()
 ct.startTraining()
 
 }
 
-workoutPage *-- currentTraining
+WorkoutPage *-- CurrentTrainingPage
 
-class currentTraining{
-- exercises ex
-- homePage hp
+class CurrentTrainingPage{
+- Exercises ex
+- HomePage hp
 + currentTraining()
 + void startTraining(String )
 + void endTraining()
@@ -97,13 +104,14 @@ class accountPage {
 + validatePassword()
 
 }
-class orderTren {
-+ orderTren()
+class OrderTrenPage {
++ orderTrenPage()
 + void orderTren()
 
 }
-class exercises {
-- sets sets
+class Exercises {
+- ExerciseMapper em
+- Sets sets
 + exercises(String exerciseName, list<sets> exercise, String note, )
 - String exerciseName
 - String note

@@ -1,21 +1,31 @@
 @startuml
 !pragma layout smetana
 
-main --> loginPage
-loginPage --> menu
+loginPage --* jFrameGUI
+menu --* loginPage
 menu *-- homePage
 menu *-- workoutPage
 menu *-- accountPage
-
+menu *-- orderTren
 account --> accountPage
+workoutPage *-- currentTraining
+currentTraining *-- exercises
+currentTraining *-- homePage
+exercises *-- sets
+util *--* menu
+
+main --> jFrameGUI
 class main
-workoutPage <-- exercises
 class loginPage
 class menu
 class homePage
+class orderTren
 class workoutPage
 class accountPage
 class exercises
+class sets
+class currentTraining
+
 class account
 
 package jFrame {

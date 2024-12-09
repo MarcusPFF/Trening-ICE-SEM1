@@ -1,9 +1,13 @@
+## Database 
+* Indset forklaring som beskriver database. 
+
 ## Github
 * Regler for projekt
   * Ny branch for hver ændring
     * Pull Request branch og få den godkendt af et team-medlem. (Auto-merger den selv efter det)
   * Selvom vi har .gitignore, så for en sikkerheds skyld så kun push relevante filer (Så bliver projektet ikke fyldt med junk, hvis nu .gitignore skulle fejle)
     * .gitignore er en fil inde på repo som bruges til at afvise junk/personalised filer.
+
 
 
 ## Metode forklaring
@@ -18,6 +22,10 @@
 Hele frontend delen med visuel brug af Javax.swing. 
 - launchGUI() 
   - Launcher vores visuelle del af programmet og kører createGUI(). 
+
+- create(XXX)GUI
+  - en metode der laver en GUI for denne page
+
 - createModernButton(String) 
   - Bruger JButton til at lave en pænere knap. 
 - createModernPanel
@@ -26,6 +34,10 @@ Hele frontend delen med visuel brug af Javax.swing.
 **(UTIL) ExerciseMapper** - Tilføjer og hiver data fra databasen "data.db"
 - exerciseMapper()
   -  Loader database af øvelser ind i et arraylist og gemmer data for træningshistorik. 
+- List<exercises> loadExerciseData()
+  - Loader vores 27 forskellige øvelser. 
+- List<exercise> saveExerciseData()
+  - Gemmer øvelser til databasen
 
 **(UTIL) AccountMapper** - Tilføjer og ændrer brugeroplysninger. 
 - accountMapper
