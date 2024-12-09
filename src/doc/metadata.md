@@ -15,10 +15,10 @@
 **Main**
 - Starter programmet. 
 
-**Jframe**
+**(JFrame) Jframe**
 - bibliotek for JFrame. 
 
-**JFrameGUI** - 
+**(JFrame) JFrameGUI** - 
 Hele frontend delen med visuel brug af Javax.swing. 
 - launchGUI() 
   - Launcher vores visuelle del af programmet og kører createGUI(). 

@@ -6,18 +6,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.net.URI;
 
-public class jFrameGUI extends JFrame {
+public class JFrameGUI extends JFrame {
 
     public void launchGUI() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-               createGUI();
+                createMenuGUI();
             }
         });
     }
 
-    public void createGUI() {
+    public void createMenuGUI() {
         // Setup til vores Jframe
         setTitle("Trening - App for Muscle Growth");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -136,6 +136,24 @@ public class jFrameGUI extends JFrame {
         add(rightPanel, BorderLayout.CENTER);
     }
 
+    public void createLoginGUI() {
+    }
+
+    public void createWorkoutGUI() {
+    }
+
+    public void currentTrainingGUI() {
+    }
+
+    public void createOrderTrenGUI() {
+    }
+
+    public void createHomeGUI() {
+    }
+
+    public void createAccountGUI() {
+    }
+
     //Metode til at lave en flot knap
     private JButton createModernButton(String text) {
         JButton button = new JButton(text);
@@ -180,4 +198,5 @@ public class jFrameGUI extends JFrame {
 
         return panel;
     }
+
 }

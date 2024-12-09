@@ -1,10 +1,10 @@
 package app;
 
-import JFrame.jFrameGUI;
+import JFrame.JFrameGUI;
 
-public class main {
+public class Main {
    public static void main(String[] args) {
-       jFrameGUI jFrameGUI = new jFrameGUI();
+       JFrameGUI jFrameGUI = new JFrameGUI();
        jFrameGUI.launchGUI();
        System.out.println("skibidi");
     }
