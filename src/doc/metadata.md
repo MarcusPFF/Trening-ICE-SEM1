@@ -40,28 +40,44 @@ Hele frontend delen med visuel brug af Javax.swing.
   - Gemmer øvelser til databasen
 
 **(UTIL) AccountMapper** - Tilføjer og ændrer brugeroplysninger. 
-- accountMapper
+- accountMapper()
   - Tilføjer brugeroplysninger emails og passwords (strings) til arraylists og mapper dem i databasen "account"
+- List<account> loadAccountData()
+  - Loader vores brugeres data.
+- List<account> saveAccountData()
+  - Gemmer data til databasen
 
 **LoginPage** - Loginfunktion med en login knap og en registrer knap, hvis login ikke findes kan bruger oprette en ny med den indtastede data. 
 
 - void displayLoginPage()
-  - Viser loginsiden, der tager mail og password
+  - Viser loginsiden, der tager imod mail og password
 - void createAccount
-  - Hvis account ikke er lavet med mail, kan en ny laves med password og ny mail
+  - Knap der lader dig oprette en bruger med indtastet data såfremt email ikke allerede er i brug. 
 - void login()
-  - Logger brugeren ind og sender brugeren videre til menu-page.
+  - Logger brugeren ind og sender brugeren videre til menu-page. (brug getter fra account klassen), og bruger validate metoderne.
+- validateEmail()
+  - metode der benyttes i loginPage, der validerer at en email indeholder et punktum og et "@" tegn (menu.ap.acc.getEmail).
+- validatePassword()
+  - Metode der benyttes i loginPage, der validerer at et password indeholder 8 tegn, et tal og et stort bogstav (menu.ap.acc.getPassword).
 
 **Menu** - Vises altid i venstre side af programmet og har 4 knapper.
-- runAlways 
-  - Sørger for at Menu altid vises og opdaterer løbende indtastet data.
-
-
+- runAlways()
+  - Sørger for at Menu altid vises i venstre side af skærmen og opdaterer løbende indtastet data.
+  - vi kalder if-statement, der ud fra hvilken knap der bliver trykket på, kører en af følgende metoder: wp.ct.hp.homePage(), wp.workoutPage(), ot.orderTren() eller ap.accountPage(). 
+  
 **Account**
 - account(String email, String password, float inputWeight, float inputHeight)
   - Konstruktør med brugers profildata. 
 - getters and setters
   - Til fremkaldelse og ændring af profildata. 
+
+**AccountPage**
+- displayAccountInfo()
+  - Viser attributterne fra account i et JField og kode vises som ******
+- setMeasurements()
+  - 2 fields der kan ændres med brugers højde og vægt. og gemmes i accountens data.
+- logOut()
+  - Knap til at logge ud og komme tilbage til loginPage.
 
 **HomePage**
 - editTraning
@@ -77,20 +93,6 @@ Hele frontend delen med visuel brug af Javax.swing.
 - orderTren
   - Linker til en hjemmeside hvor man kan bestille trentrombolone. 
 
-
-**AccountPage**
-- displayAccountinfo
-  - Viser email i et JField 
-- changePassword 
-  - Knap der lader dig ændre dit password. Kaldes på i loginPage hvor det kræver at man kan huske sit gamle password for at ændre det. 
-- setMeasurements 
-  - 2 fields der kan ændres med brugers højde og vægt.
-- logOut
-  - Knap til at logge ud og komme tilbage til loginPage. 
-- validateEmail
-  - metode der benyttes i loginPage der validerer at en email indeholder et punktum og et "@" tegn.
-- validatePassword
-  - Metode der benyttes i loginPage der validerer at et password indeholder 8 tegn, et tal og et stort bogstav.  
 
 **CurrentTraining**
 - startTraining

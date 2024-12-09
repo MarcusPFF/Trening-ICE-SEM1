@@ -14,17 +14,15 @@ CurrentTrainingPage *-- Exercises
 "util" --* Exercises
 Sets --* Exercises
 
-class main {
-package Jframe.JframeGUI
-- jFrameGUI jFrameGUI = new jFrameGUI();
+class Main {
+package JFrame.JFrameGUI
+- JFrameGUI JFrameGUI = new JFrameGUI();
 + static void main(String[] args)
-jFrameGUI.launchGUI()
-
-
+JFrameGUI.launchGUI()
 
 }
-package Jframe{
-class jFrameGUI extends Jframe  {
+package JFrame{
+class JFrameGUI extends JFrame  {
 + void launchGUI()
 + void createMenuGUI()
 + void createLoginGUI()
@@ -39,8 +37,8 @@ class jFrameGUI extends Jframe  {
 }
 }
 
-class loginPage {
-- menu menu
+class LoginPage {
+- Menu menu
 
 ' Constructor
 + loginPage()
@@ -49,6 +47,8 @@ class loginPage {
 + void displayLoginPage()
 + void createAccount()[menu.runAlways()]
 + void login()[menu.runAlways()]
++ validateEmail()
++ validatePassword()
 
 }
 class Menu {
@@ -75,7 +75,7 @@ class WorkoutPage {
 - CurrentTrainingPage ct
 - ExercisesMapper em
 + workoutPage()
-ct.startTraining()
+ct.StartTraining()
 
 }
 
@@ -93,15 +93,12 @@ class CurrentTrainingPage{
 + Getter & Setter()
 }
 
-class accountPage {
-- account acc
+class AccountPage {
+- Account acc
 + accountPage()
 + void displayAccountInfo()
-+ void changePassword()
 + void setMeasurements()([acc.setInputHeight, acc.setInputWeight])
 + void logOut()
-+ validateEmail()
-+ validatePassword()
 
 }
 class OrderTrenPage {
@@ -120,9 +117,9 @@ class Exercises {
 
 
 + void addSetsToExercise()
-- sets set1 = new sets()
-- sets set2 = new sets()
-- sets set3 = new sets()
+- Sets set1 = new sets()
+- Sets set2 = new sets()
+- Sets set3 = new sets()
 - exercise.add(set1)
 - exercise.add(set2)
 - exercise.add(set3)
@@ -135,7 +132,7 @@ class Exercises {
 
 }
 
-class account {
+class Account {
 - String email
 - String password
 - float inputWeight
@@ -145,7 +142,7 @@ class account {
 + Getter & Setter()
 
 }
-class sets {
+class Sets {
 - int reps
 - float kg
 
@@ -154,7 +151,7 @@ class sets {
 }
 
 package "util" {
-class accountMapper {
+class AccountMapper {
 + accountMapper()
 - List<account> account
 
@@ -162,7 +159,7 @@ class accountMapper {
 +List<account> saveAccountData()
 }
 
-class exercisesMapper {
+class ExercisesMapper {
 + exerciseMapper()
 + List<exercises> loadExercisesData()
 + List<exercises> saveExercisesData()
