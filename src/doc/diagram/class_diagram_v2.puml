@@ -1,0 +1,174 @@
+@startuml
+!pragma layout smetana
+
+
+Main --> JFrameGUI
+JFrameGUI *-- LoginPage
+LoginPage *-- Menu
+CurrentTrainingPage *-- HomePage
+HomePage *-- Workout
+Menu *-- WorkoutPage
+Menu *-- AccountPage
+Menu *-- OrderTrenPage
+Account --* AccountPage
+CurrentTrainingPage *-- Exercises
+"util" *--* Menu
+"util" --* Exercises
+Sets --* Exercises
+
+class Main {
+package JFrame.JFrameGUI
+- JFrameGUI JFrameGUI = new JFrameGUI();
++ static void main(String[] args)
+JFrameGUI.launchGUI()
+
+}
+package JFrame{
+class JFrameGUI extends JFrame  {
++ void launchGUI()
++ void createMenuGUI()
++ void createLoginGUI()
++ void createWorkoutGUI()
++ void currentTrainingGUI()
++ void createOrderTrenGUI()
++ void createHomeGUI()
++ void createAccountGUI()
+- JButton createModernButton(String text)
+- JPanel createModernPanel(String labelText)
+}
+}
+
+class LoginPage {
+# Menu menu
+
+' Constructor
++ loginPage()
+
+' Metoder
++ void displayLoginPage()
++ void createAccount()[menu.runAlways()]
++ void login()[menu.runAlways()]
++ validateEmail()
++ validatePassword()
+
+}
+class Menu {
+# WorkoutPage wp;
+# OrderTrenPage ot;
+# AccountPage ap;
+# AccountMapper am;
+# ExercisesMapper em;
++ menu()
++ void runAlways()
+ wp.ct.hp.HomePage()
+ wp.WorkoutPage()
+ ot.OrderTrenPage()
+ ap.AccountPage()
+
+
+}
+class HomePage{
++ homePage()
++ void editTraining()
++ void displayTrainingHistory()
+}
+class WorkoutPage {
+- CurrentTrainingPage ct
+- ExercisesMapper em
++ workoutPage()
+ct.StartTraining()
+
+}
+
+WorkoutPage *-- CurrentTrainingPage
+
+class CurrentTrainingPage{
+- Exercises ex
+- HomePage hp
++ currentTraining()
++ void startTraining()
++ void endTraining()
++ int editReps()
++ float editKg()
++ String editNote()
++ Getter & Setter()
+}
+
+class AccountPage {
+- Account acc
++ accountPage()
++ void displayAccountInfo()
++ void setMeasurements()([acc.setInputHeight, acc.setInputWeight])
++ void logOut()
+
+}
+class OrderTrenPage {
++ orderTrenPage()
++ void orderTren()
+
+}
+class Exercises {
+- ExerciseMapper em
++ Exercises(String exerciseName, list<sets> exercise, String note, )
+- String exerciseName
+- String note
+- List<sets> exercise
+- List<Exercises> TrainingProgram
+
+
+
+}
+
+class Account {
+- String email
+- String password
+- float inputWeight
+- float inputHeight
+
++ account(String email, String password, float inputWeight, float inputHeight
++ Getter & Setter()
+
+}
+class Sets {
+- int reps
+- float kg
+
++ sets(int reps, float kg)
++ Getter & Setter()
+}
+
+class Workout {
+# String ProgramName;
+# protected float ProgramDate;
+# protected int ProgramID;
++ List<Workout> EarlierWorkouts;
++ Workout(String ProgramName, float ProgramDate, int ProgramID)
+}
+
+package "util" {
+class DBConnector {
++ void connect(String url)
+}
+class AccountMapper {
++ accountMapper()
+- List<Account> account
+
++List<Account> loadAccountData()
++List<Account> saveAccountData()
+}
+
+
+class ExercisesMapper {
+- Exercises ex;
+- Workout wo;
+
++ exerciseMapper()
++ List<exercises> loadExercisesData()
++ List<exercises> saveExercisesData()
++ List<Workout> loadEarlierWorkouts()
++ List<Exercises> loadSpecificExerciseData()
++ List<Exercises> loadLastExerciseData()
+}
+
+}
+@enduml

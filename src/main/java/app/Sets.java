@@ -3,7 +3,7 @@ public class Sets {
     private int reps;
     private float kg;
 
-    public Sets(int reps, float kg) {
+    public Sets(int reps, float kg, int Set_Number) {
     }
 
     public void setReps(int reps) {
