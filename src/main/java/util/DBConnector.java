@@ -1,8 +1,6 @@
 package util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DBConnector {
     Connection connect;
@@ -11,6 +9,9 @@ public class DBConnector {
 
         try {
             connect = DriverManager.getConnection(url);
+            Statement stmt = connect.createStatement();
+            //ResultSet rs = stmt.executeQuery(sql) - Dette skal bruges i enten EM eller AM
+
             System.out.println("Connection to SQLite has been established.");
 
         } catch (SQLException e) {
