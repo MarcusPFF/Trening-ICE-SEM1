@@ -4,7 +4,8 @@
 ## Github
 * Regler for projekt
   * Ny branch for hver ændring
-    * Pull Request branch og få den godkendt af et team-medlem. (Auto-merger den selv efter det)
+    * Brug kommandoen  git push --set-upstream origin <branchname> så snart du har lavet en ny branch, så pusher du
+      * Pull Request branch og få den godkendt af et team-medlem. (Auto-merger den selv efter det)
   * Selvom vi har .gitignore, så for en sikkerheds skyld så kun push relevante filer (Så bliver projektet ikke fyldt med junk, hvis nu .gitignore skulle fejle)
     * .gitignore er en fil inde på repo som bruges til at afvise junk/personalised filer.
 

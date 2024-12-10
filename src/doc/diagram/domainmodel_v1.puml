@@ -1,0 +1,27 @@
+@startuml
+!pragma layout smetana
+
+Main --> JFrameGUI
+JFrameGUI *-- LoginPage
+LoginPage *-- Menu
+WorkoutPage --* Menu
+CurrentTrainingPage --* WorkoutPage
+HomePage --* CurrentTrainingPage
+Exercises --* CurrentTrainingPage
+Exercises --* Sets
+OrderTrenPage --* Menu
+AccountPage --* Menu
+AccountPage --* Account
+util --* Exercises
+util *--* Menu
+package util {
+class ExerciseMapper
+class AccountMapper
+class DBConnection
+}
+
+package JFrame {
+class JFrameGUI
+class JFrame
+}
+@enduml
