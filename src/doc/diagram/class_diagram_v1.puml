@@ -1,6 +1,7 @@
 @startuml
 !pragma layout smetana
 
+
 Main --> JFrameGUI
 JFrameGUI *-- LoginPage
 LoginPage *-- Menu
@@ -28,17 +29,16 @@ class JFrameGUI extends JFrame  {
 + void createLoginGUI()
 + void createWorkoutGUI()
 + void currentTrainingGUI()
-+ void orderTrenPage()
-+ void homePage()
-+ void accountPage()
-
++ void createOrderTrenGUI()
++ void createHomeGUI()
++ void createAccountGUI()
 - JButton createModernButton(String text)
 - JPanel createModernPanel(String labelText)
 }
 }
 
 class LoginPage {
-- Menu menu
+# Menu menu
 
 ' Constructor
 + loginPage()
@@ -52,11 +52,11 @@ class LoginPage {
 
 }
 class Menu {
-- WorkoutPage wp;
-- OrderTrenPage ot;
-- AccountPage ap;
-- AccountMapper am;
-- ExercisesMapper em;
+# WorkoutPage wp;
+# OrderTrenPage ot;
+# AccountPage ap;
+# AccountMapper am;
+# ExercisesMapper em;
 + menu()
 + void runAlways()
  wp.ct.hp.HomePage()
@@ -85,7 +85,7 @@ class CurrentTrainingPage{
 - Exercises ex
 - HomePage hp
 + currentTraining()
-+ void startTraining(String )
++ void startTraining()
 + void endTraining()
 + int editReps()
 + float editKg()
@@ -108,7 +108,6 @@ class OrderTrenPage {
 }
 class Exercises {
 - ExerciseMapper em
-- Sets sets
 + exercises(String exerciseName, list<sets> exercise, String note, )
 - String exerciseName
 - String note
@@ -147,18 +146,25 @@ class Sets {
 }
 
 package "util" {
+class DBConnector {
++ void connect(String url)
+}
 class AccountMapper {
 + accountMapper()
-- List<account> account
+- List<Account> account
 
-+List<account> loadAccountData()
-+List<account> saveAccountData()
++List<Account> loadAccountData()
++List<Account> saveAccountData()
 }
 
+
 class ExercisesMapper {
+- Exercises ex;
+
 + exerciseMapper()
 + List<exercises> loadExercisesData()
 + List<exercises> saveExercisesData()
 }
+
 }
 @enduml
