@@ -1,5 +1,6 @@
 ## Database 
-* Indset forklaring som beskriver database. 
+**DBConnector**
+  - Både i ExerciseMapper/AccountMapper refererer vi til DBConnector, så det muligt at lave SQL kald.
 
 ## Github
 * Regler for projekt
