@@ -7,11 +7,13 @@ import app.Workout;
 import java.util.List;
 
 public class ExercisesMapper {
+    DBConnector dbconnector;
     Exercises ex;
     Workout wo;
 
 
     public ExercisesMapper() {
+        dbconnector = new DBConnector();
     }
 
     public List<Exercises> loadExercisesData() {
