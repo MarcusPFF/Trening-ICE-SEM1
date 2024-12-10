@@ -22,6 +22,7 @@ public class DBConnector {
     }
     /* Ret dette så navnene giver mening
 
+
      */
     public ArrayList<String> selectPlayers() {
         // initialize a List to return the selected data as string elements

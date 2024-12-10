@@ -7,5 +7,6 @@ public class Main {
        JFrameGUI jFrameGUI = new JFrameGUI();
        jFrameGUI.launchGUI();
        System.out.println("skibidi");
+
     }
 }

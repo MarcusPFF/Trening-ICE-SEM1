@@ -1,6 +1,7 @@
 @startuml
 !pragma layout smetana
 
+
 Main --> JFrameGUI
 JFrameGUI *-- LoginPage
 LoginPage *-- Menu

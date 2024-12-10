@@ -18,6 +18,7 @@ public class Sets {
         this.kg = kg;
     }
 
+
     public float getKg() {
         return kg;
     }

@@ -18,6 +18,7 @@ public class Exercises {
 
     }
 
+
     public void addSetsToExercise() {
         Sets set1 = new Sets(/*em.loadExerciseRepsData(1), em.loadExerciseKgData(1)*/);
         Sets set2 = new Sets(/*em.loadExerciseRepsData(2), em.loadExerciseKgData(2)*/);

@@ -17,6 +17,7 @@ public class Menu {
         em = new ExercisesMapper();
     }
 
+
     public void runAlways() {
     }
 }

@@ -8,6 +8,7 @@ public class AccountPage {
     public void displayAccountInfo() {
     }
 
+
     public void setMeasurements(Account acc) {
         this.acc = acc;
         acc.getInputHeight();

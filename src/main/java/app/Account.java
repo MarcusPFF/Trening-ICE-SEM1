@@ -9,6 +9,7 @@ public class Account {
     public Account(String email, String password, float inputWeight, float inputHeight) {
     }
 
+
     public void setEmail(String email) {}
     public String getEmail() {
         return email;

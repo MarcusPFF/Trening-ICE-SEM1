@@ -7,6 +7,7 @@ public class CurrentTrainingPage {
 
     public CurrentTrainingPage() {}
 
+
     public void startTraining() {}
     public void endTraining() {}
     public int editReps() {return 0;}

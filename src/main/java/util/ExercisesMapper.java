@@ -28,4 +28,5 @@ public class ExercisesMapper {
         int Kg = rs.getInt("Set" + setNr);
         return Kg;
     }*/
+
 }

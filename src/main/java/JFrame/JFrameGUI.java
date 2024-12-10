@@ -17,6 +17,7 @@ public class JFrameGUI extends JFrame {
         });
     }
 
+
     public void createMenuGUI() {
         // Setup til vores Jframe
         setTitle("Trening - App for Muscle Growth");

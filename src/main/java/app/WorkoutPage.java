@@ -10,4 +10,5 @@ public class WorkoutPage {
         ct = new CurrentTrainingPage();
         ct.startTraining();
     }
+
 }
