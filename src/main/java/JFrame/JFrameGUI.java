@@ -2,142 +2,159 @@ package JFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.net.URI;
 
 public class JFrameGUI extends JFrame {
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
 
     public void launchGUI() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                createMenuGUI();
-            }
-        });
+        createLoginGUI();
     }
 
-
     public void createMenuGUI() {
-        // Setup til vores Jframe
-        setTitle("Trening - App for Muscle Growth");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 600);
-        setResizable(true);
-        setVisible(true);
+        JPanel menuPanel = new JPanel(new BorderLayout());
+        menuPanel.setBackground(new Color(204, 204, 238));
 
-        //Logo til app
-        ImageIcon image = new ImageIcon("path");
-        setIconImage(image.getImage());
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(new Color(34, 45, 50));
 
-        //  Baggrunds farve
-        getContentPane().setBackground(new Color(204, 204, 238));
-
-        //Side menu objekt hvor vi sætter værdier
-        JPanel sideMenu = new JPanel();
-        sideMenu.setLayout(new BoxLayout(sideMenu, BoxLayout.Y_AXIS));
-        sideMenu.setBackground(new Color(34, 45, 50));
-
-        //Kalder metode "createModernButton" som er lavet til at lave styling på knapper. Vi laver hermed 4 knapper
         JButton button1 = createModernButton("Home");
         JButton button2 = createModernButton("Workout");
         JButton button3 = createModernButton("Shop");
         JButton button4 = createModernButton("Account");
 
-
-        // Hvor store knapperne er i side menuen
         button1.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
         button2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
         button3.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
         button4.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
 
-        // Vi tilføjer knapperne til sideMenu objektet
-        sideMenu.add(button1);
-        sideMenu.add(button2);
-        sideMenu.add(button3);
-        sideMenu.add(button4);
+        panel.add(button1);
+        panel.add(button2);
+        panel.add(button3);
+        panel.add(button4);
 
-        // Dette går så sideMenuen har en dynamisk resize evne
-        sideMenu.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Layout for højre rightpanel
-        CardLayout Layout = new CardLayout();
-        JPanel rightPanel = new JPanel(Layout);
+        CardLayout layout = new CardLayout();
+        JPanel rightPanel = new JPanel(layout);
 
-        // Ligesom før så er den her metode "createModernPanel" lavet til at man kan style en side pæn.
         JPanel menu1 = createModernPanel("Welcome to home page!");
         JPanel menu2 = createModernPanel("Start a workout");
         JPanel menu3 = createModernPanel("Order your Tren now!");
         JPanel menu4 = createModernPanel("Manage your account.");
 
-        //Dette er sådan du laver nye knapper
-        JButton eksempelPåKnap = createModernButton("Eksempel på knap");
-        //Du kan bruge NORTH, SOUTH, EAST, WEST til at definere hvor knappen skal være.
-        menu2.add(eksempelPåKnap, BorderLayout.SOUTH);
+        JButton exampleButton = createModernButton("Example Button");
+        menu2.add(exampleButton, BorderLayout.SOUTH);
 
-        JButton buytren = createModernButton("Shop now!");
-        menu3.add(buytren, BorderLayout.SOUTH);
+        JButton buyTrenButton = createModernButton("Shop now!");
+        menu3.add(buyTrenButton, BorderLayout.SOUTH);
 
-        // Vi tilføjer menu1,2,3,4 til rightpanel
+        JButton logout = createModernButton("Logout");
+        menu4.add(logout, BorderLayout.SOUTH);
+
         rightPanel.add(menu1, "Menu");
         rightPanel.add(menu2, "Workout");
         rightPanel.add(menu3, "Shop");
         rightPanel.add(menu4, "Account");
 
-        // Her er hvor vi definere hvad der skal ske når man trykker på knapperne. "ActionListener"
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Layout.show(rightPanel, "Menu");
+        button1.addActionListener(e -> layout.show(rightPanel, "Menu"));
+        button2.addActionListener(e -> layout.show(rightPanel, "Workout"));
+        button3.addActionListener(e -> layout.show(rightPanel, "Shop"));
+        button4.addActionListener(e -> layout.show(rightPanel, "Account"));
+
+        buyTrenButton.addActionListener(e -> {
+            try {
+                Desktop.getDesktop().browse(new URI("https://politi.dk/"));
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
-        button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Layout.show(rightPanel, "Workout");
+        logout.addActionListener(e -> {
+            try {
+                logout();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
-        button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Layout.show(rightPanel, "Shop");
-            }
-        });
+        menuPanel.add(panel, BorderLayout.WEST);
+        menuPanel.add(rightPanel, BorderLayout.CENTER);
 
-        button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Layout.show(rightPanel, "Account");
-            }
-        });
-
-        buytren.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    // Åbner webbrowseren med den angivne URL
-                    Desktop.getDesktop().browse(new URI("https://politi.dk/"));
-                } catch (Exception ex) {
-                    ex.printStackTrace();  // Håndterer undtagelser, hvis noget går galt
-                }
-            }
-        });
-
-        //Eksempel
-        /*eksempelPåKnap.addActionListener(new ActionListener() {
-           StartTraining()
-        });
-
-         */
-
-        //Tilføjer sidemenu og rightpanel til borderLayout.
-        add(sideMenu, BorderLayout.WEST);
-        add(rightPanel, BorderLayout.CENTER);
+        mainPanel.add(menuPanel, "Menu");
     }
 
     public void createLoginGUI() {
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
+
+        setTitle("Trening - App for Muscle Growth");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(600, 600);
+        setResizable(false);
+
+        ImageIcon image = new ImageIcon("path");
+        setIconImage(image.getImage());
+
+        JPanel loginPanel = new JPanel(new GridBagLayout());
+        loginPanel.setBackground(new Color(34, 45, 50));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        ImageIcon logo = new ImageIcon("src/doc/docs/treninglogo.png");
+        Image resizedImage = logo.getImage().getScaledInstance(400, 300, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        JLabel logoPNG = new JLabel(resizedIcon);
+        logoPNG.setHorizontalAlignment(SwingConstants.CENTER);
+        loginPanel.add(logoPNG, gbc);
+
+        gbc.gridy = 1;
+        JTextField emailField = new JTextField(20);
+        emailField.setText("Email");
+        loginPanel.add(emailField, gbc);
+
+        gbc.gridy = 2;
+        JPasswordField passwordField = new JPasswordField(20);
+        passwordField.setText("Password");
+        loginPanel.add(passwordField, gbc);
+
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        JButton loginButton = createModernButton("Login");
+        loginPanel.add(loginButton, gbc);
+
+        gbc.gridx = 1;
+        JButton createAccountButton = createModernButton("Create Account");
+        loginPanel.add(createAccountButton, gbc);
+
+        mainPanel.add(loginPanel, "Login");
+        add(mainPanel);
+        cardLayout.show(mainPanel, "Login");
+
+        loginButton.addActionListener(e -> {
+            createMenuGUI();
+            cardLayout.show(mainPanel, "Menu");
+        });
+
+        createAccountButton.addActionListener(e -> {
+            createMenuGUI();
+            cardLayout.show(mainPanel, "Menu");
+        });
+
+        setVisible(true);
+    }
+
+    private void logout() {
+        cardLayout.show(mainPanel, "Login");
     }
 
     public void createWorkoutGUI() {
@@ -155,7 +172,6 @@ public class JFrameGUI extends JFrame {
     public void createAccountGUI() {
     }
 
-    //Metode til at lave en flot knap
     private JButton createModernButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Roboto", Font.PLAIN, 16));
@@ -165,12 +181,8 @@ public class JFrameGUI extends JFrame {
         button.setFocusPainted(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.setOpaque(true);
-        button.setBorder(BorderFactory.createCompoundBorder(
-                button.getBorder(),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
+        button.setBorder(BorderFactory.createCompoundBorder(button.getBorder(), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
 
-        // Knap hover effekt
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(0, 102, 204));
@@ -184,12 +196,10 @@ public class JFrameGUI extends JFrame {
         return button;
     }
 
-    //Metode til at lave et flot panel
     private JPanel createModernPanel(String labelText) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBackground(new Color(255, 255, 255));
-
 
         JLabel label = new JLabel(labelText, JLabel.CENTER);
         label.setFont(new Font("Roboto", Font.BOLD, 24));
@@ -199,5 +209,4 @@ public class JFrameGUI extends JFrame {
 
         return panel;
     }
-
 }
