@@ -9,10 +9,10 @@ public class JFrameGUI extends JFrame {
     private CardLayout cardLayout;
 
     public void launchGUI() {
-        createLoginGUI();
+        displayLoginGUI();
     }
 
-    public void createMenuGUI() {
+    public void displayMenuGUI() {
         JPanel menuPanel = new JPanel(new BorderLayout());
         menuPanel.setBackground(new Color(204, 204, 238));
 
@@ -45,15 +45,6 @@ public class JFrameGUI extends JFrame {
         JPanel menu3 = createModernPanel("Order your Tren now!");
         JPanel menu4 = createModernPanel("Manage your account.");
 
-        JButton exampleButton = createModernButton("Example Button");
-        menu2.add(exampleButton, BorderLayout.SOUTH);
-
-        JButton buyTrenButton = createModernButton("Shop now!");
-        menu3.add(buyTrenButton, BorderLayout.SOUTH);
-
-        JButton logout = createModernButton("Logout");
-        menu4.add(logout, BorderLayout.SOUTH);
-
         rightPanel.add(menu1, "Menu");
         rightPanel.add(menu2, "Workout");
         rightPanel.add(menu3, "Shop");
@@ -64,15 +55,70 @@ public class JFrameGUI extends JFrame {
         button3.addActionListener(e -> layout.show(rightPanel, "Shop"));
         button4.addActionListener(e -> layout.show(rightPanel, "Account"));
 
+        //WORKOUT PAGE BUTTONS
+
+        JButton Push = createModernButton("Push");
+        menu2.add(Push, BorderLayout.NORTH);
+
+        JButton Pull = createModernButton("Pull");
+        menu2.add(Pull, BorderLayout.CENTER);
+
+        JButton Legs = createModernButton("Legs");
+        menu2.add(Legs, BorderLayout.SOUTH);
+
+        //TREN PAGE
+        JButton buyTrenButton = createModernButton("Shop now!");
+        menu3.add(buyTrenButton, BorderLayout.SOUTH);
+
+        //ACCOUNT PAGE BUTTONS
+
+
+
+        JTextField weightField = new JTextField(15);
+        menu4.add(weightField);
+        weightField.setBounds(150, 290, 200, 30);
+        menu4.add(weightField);
+
+
+        //Height field
+        JTextField heightField = new JTextField(15);
+        menu4.add(heightField);
+        heightField.setBounds(150, 235, 200, 30);
+        menu4.add(heightField);
+
+        JLabel heightLabel = new JLabel("Height");
+        heightLabel.setBounds(231,200,50,50);
+        menu4.add(heightLabel);
+
+        JLabel weightLabel = new JLabel("                                                     Weight");
+        weightLabel.setBounds(500,500,500,500);
+        menu4.add(weightLabel);
+
+
+
+
+
+
+        JButton logoutButton = createModernButton("Logout");
+        menu4.add(logoutButton, BorderLayout.SOUTH);
+
+
+
+
+
+        //FUNKTIONER TIL KNAPPERNE NÅR MAN TRYKKER PÅ DEN
+
+        //BuyTren knappen fører dig hen til tren brorz
         buyTrenButton.addActionListener(e -> {
             try {
-                Desktop.getDesktop().browse(new URI("https://politi.dk/"));
+                Desktop.getDesktop().browse(new URI("https://www.mega-gear.net/en/12-tren-enant-150.html"));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
 
-        logout.addActionListener(e -> {
+        //Logger dig ud (i account)
+        logoutButton.addActionListener(e -> {
             try {
                 logout();
             } catch (Exception ex) {
@@ -82,11 +128,10 @@ public class JFrameGUI extends JFrame {
 
         menuPanel.add(panel, BorderLayout.WEST);
         menuPanel.add(rightPanel, BorderLayout.CENTER);
-
         mainPanel.add(menuPanel, "Menu");
-    }
 
-    public void createLoginGUI() {
+    }
+    public void displayLoginGUI() {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
@@ -95,7 +140,7 @@ public class JFrameGUI extends JFrame {
         setSize(600, 600);
         setResizable(false);
 
-        ImageIcon image = new ImageIcon("path");
+        ImageIcon image = new ImageIcon("src/doc/docs/treninglogo.png");
         setIconImage(image.getImage());
 
         JPanel loginPanel = new JPanel(new GridBagLayout());
@@ -141,36 +186,39 @@ public class JFrameGUI extends JFrame {
         cardLayout.show(mainPanel, "Login");
 
         loginButton.addActionListener(e -> {
-            createMenuGUI();
+            displayMenuGUI();
             cardLayout.show(mainPanel, "Menu");
         });
 
         createAccountButton.addActionListener(e -> {
-            createMenuGUI();
+            displayMenuGUI();
             cardLayout.show(mainPanel, "Menu");
         });
 
         setVisible(true);
+
+
+
+
+
     }
 
     private void logout() {
         cardLayout.show(mainPanel, "Login");
     }
 
-    public void createWorkoutGUI() {
+    /*
+    public void displayWorkoutGUI() {
     }
-
-    public void currentTrainingGUI() {
+    public void displayTrainingGUI() {
     }
-
-    public void createOrderTrenGUI() {
+    public void displayOrderTrenGUI() {
     }
-
-    public void createHomeGUI() {
+    public void displayHomeGUI() {
     }
-
-    public void createAccountGUI() {
+    public void displayAccountGUI() {
     }
+    */
 
     private JButton createModernButton(String text) {
         JButton button = new JButton(text);
@@ -196,12 +244,12 @@ public class JFrameGUI extends JFrame {
         return button;
     }
 
-    private JPanel createModernPanel(String labelText) {
+    private JPanel createModernPanel(String text) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBackground(new Color(255, 255, 255));
 
-        JLabel label = new JLabel(labelText, JLabel.CENTER);
+        JLabel label = new JLabel(text, JLabel.CENTER);
         label.setFont(new Font("Roboto", Font.BOLD, 24));
         label.setForeground(new Color(60, 60, 60));
         panel.add(label, BorderLayout.NORTH);
