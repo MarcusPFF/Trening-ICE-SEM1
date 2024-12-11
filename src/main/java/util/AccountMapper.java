@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountMapper {
+    DBConnector dbconnector;
+
+    public AccountMapper {
+        dbconnector = new DBConnector();
+    }
     private List<Account> account;
 
     public AccountMapper() {
