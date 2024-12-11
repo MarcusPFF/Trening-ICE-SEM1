@@ -3,11 +3,11 @@ import util.AccountMapper;
 import util.ExercisesMapper;
 
 public class Menu {
-    protected WorkoutPage wp;
-    protected OrderTrenPage ot;
-    protected AccountPage ap;
-    protected AccountMapper am;
-    protected ExercisesMapper em;
+    public WorkoutPage wp;
+    public OrderTrenPage ot;
+    public AccountPage ap;
+    public AccountMapper am;
+    public ExercisesMapper em;
 
     public Menu() {
         wp = new WorkoutPage();
