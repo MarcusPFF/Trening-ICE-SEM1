@@ -3,7 +3,8 @@ package app;
 public class AccountPage {
     private Account acc;
 
-    public AccountPage() {}
+    public AccountPage() {
+    }
 
     public void displayAccountInfo() {
     }
@@ -14,5 +15,7 @@ public class AccountPage {
         acc.getInputHeight();
         acc.getInputWeight();
     }
-    public void logOut() {}
+
+    public void logOut() {
+    }
 }

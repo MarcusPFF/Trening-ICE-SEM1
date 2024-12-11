@@ -3,7 +3,7 @@ package app;
 import util.ExercisesMapper;
 
 public class WorkoutPage {
-    private CurrentTrainingPage ct;
+    private final CurrentTrainingPage ct;
     private ExercisesMapper em;
 
     public WorkoutPage() {

@@ -1,8 +1,10 @@
 package app;
 
 public class OrderTrenPage {
-    public OrderTrenPage() {}
+    public OrderTrenPage() {
+    }
 
-    public void orderTren() {}
+    public void orderTren() {
+    }
 
 }

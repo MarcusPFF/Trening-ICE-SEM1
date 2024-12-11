@@ -5,11 +5,11 @@ import util.ExercisesMapper;
 import java.util.List;
 
 public class Exercises {
-    protected ExercisesMapper em;
     public String exerciseName;
-    protected String note;
     public List<Sets> exercise;
     public List<Exercises> TrainingProgram;
+    protected ExercisesMapper em;
+    protected String note;
 
 
     public Exercises(String exerciseName, List<Sets> exercise, String note) {

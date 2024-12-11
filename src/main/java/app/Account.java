@@ -9,27 +9,34 @@ public class Account {
     public Account(String email, String password, float inputWeight, float inputHeight) {
     }
 
-
-    public void setEmail(String email) {}
     public String getEmail() {
         return email;
     }
-    public void setPassword(String password) {
-        this.password = password;
+
+    public void setEmail(String email) {
     }
+
     public String getPassword() {
         return password;
     }
-    public void setInputWeight(float inputWeight) {
-        this.inputWeight = inputWeight;
+
+    public void setPassword(String password) {
+        this.password = password;
     }
+
     public float getInputWeight() {
         return inputWeight;
     }
-    public void setInputHeight(float inputHeight) {
-        this.inputHeight = inputHeight;
+
+    public void setInputWeight(float inputWeight) {
+        this.inputWeight = inputWeight;
     }
+
     public float getInputHeight() {
         return inputHeight;
+    }
+
+    public void setInputHeight(float inputHeight) {
+        this.inputHeight = inputHeight;
     }
 }
