@@ -1,5 +1,8 @@
 ## Database 
-* Indset forklaring som beskriver database. 
+**DBConnector**
+  - Både i ExerciseMapper/AccountMapper refererer vi til DBConnector, så det muligt at lave SQL kald.
+    - Her bruges Statement stmt = dbconnect.connect.createStatement() eller ResultSet rs = dbconnect.stmt.executeQuery(sql)
+
 
 ## Github
 * Regler for projekt
