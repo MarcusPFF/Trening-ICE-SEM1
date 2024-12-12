@@ -5,13 +5,13 @@
 Main --> JFrameGUI
 JFrameGUI *-- LoginPage
 LoginPage *-- Menu
-CurrentTrainingPage *-- HomePage
+WorkoutPage *-- HomePage
 HomePage *-- Workout
 Menu *-- WorkoutPage
 Menu *-- AccountPage
 Menu *-- OrderTrenPage
 Account --* AccountPage
-CurrentTrainingPage *-- Exercises
+WorkoutPage *-- Exercises
 "util" *--* Menu
 "util" --* Exercises
 Sets --* Exercises
@@ -53,11 +53,11 @@ class LoginPage {
 
 }
 class Menu {
-# WorkoutPage wp;
-# OrderTrenPage ot;
-# AccountPage ap;
-# AccountMapper am;
-# ExercisesMapper em;
++ WorkoutPage wp;
++ OrderTrenPage ot;
++ AccountPage ap;
++ AccountMapper am;
++ ExercisesMapper em;
 + menu()
 + void runAlways()
  wp.ct.hp.HomePage()
@@ -68,23 +68,15 @@ class Menu {
 
 }
 class HomePage{
++ Workout wo
 + homePage()
 + void editTraining()
 + void displayTrainingHistory()
 }
 class WorkoutPage {
-- CurrentTrainingPage ct
-- ExercisesMapper em
 + workoutPage()
-ct.StartTraining()
-
-}
-
-WorkoutPage *-- CurrentTrainingPage
-
-class CurrentTrainingPage{
-- Exercises ex
-- HomePage hp
++ Exercises ex
++ HomePage hp
 + currentTraining()
 + void startTraining()
 + void endTraining()
@@ -92,10 +84,14 @@ class CurrentTrainingPage{
 + float editKg()
 + String editNote()
 + Getter & Setter()
+
+
+
 }
 
+
 class AccountPage {
-- Account acc
++ Account acc
 + accountPage()
 + void displayAccountInfo()
 + void setMeasurements()([acc.setInputHeight, acc.setInputWeight])
@@ -108,13 +104,16 @@ class OrderTrenPage {
 
 }
 class Exercises {
-- ExerciseMapper em
-+ Exercises(String exerciseName, list<sets> exercise, String note, )
-- String exerciseName
-- String note
-- List<sets> exercise
-- List<Exercises> TrainingProgram
-
+# ExerciseMapper em
++ Exercises(String exerciseName, list<sets> exercise, String note)
++ void addExerciseToTrainingProgram(Exercises exercises)
++ void addSetToExercise(Sets sets)
++ void removeSetsFromExercise()
+# String exerciseName
+# String note
+# List<sets> exercise
+# List<Exercises> TrainingProgram
++ Getter og Setter()
 
 
 }
@@ -122,16 +121,16 @@ class Exercises {
 class Account {
 - String email
 - String password
-- float inputWeight
-- float inputHeight
-
-+ account(String email, String password, float inputWeight, float inputHeight
+- float Weight
+- float Height
+- int AccountID
++ account(int AccountID, String email, String password, float inputWeight, float inputHeight
 + Getter & Setter()
 
 }
 class Sets {
-- int reps
-- float kg
+# int reps
+# float kg
 
 + sets(int reps, float kg)
 + Getter & Setter()
@@ -141,17 +140,20 @@ class Workout {
 # String ProgramName;
 # protected float ProgramDate;
 # protected int ProgramID;
-+ List<Workout> EarlierWorkouts;
+# List<Workout> EarlierWorkouts;
 + Workout(String ProgramName, float ProgramDate, int ProgramID)
++ void addWorkoutToEarlierWorkouts(Workout workout)
++ void addWorkoutToDefaultWorkoutPrograms(Workout workout)
 }
 
 package "util" {
-class DBConnector {
-+ void connect(String url)
-}
 class AccountMapper {
+- Menu menu;
+- Connection connect;
+
 + accountMapper()
-- List<Account> account
+
++ void connect(String url)
 
 +List<Account> loadAccountData()
 +List<Account> saveAccountData()
@@ -161,13 +163,20 @@ class AccountMapper {
 class ExercisesMapper {
 - Exercises ex;
 - Workout wo;
+- Menu menu;
+- Connection connect;
 
 + exerciseMapper()
++ void connect(String url)
 + List<exercises> loadExercisesData()
 + List<exercises> saveExercisesData()
 + List<Workout> loadEarlierWorkouts()
 + List<Exercises> loadSpecificExerciseData()
 + List<Exercises> loadLastExerciseData()
++ void loadDefaultWorkoutPrograms()
++ void loadEarlierWorkouts()
++ void loadSpecificExerciseData()
++ void loadLastExerciseData()
 }
 
 }

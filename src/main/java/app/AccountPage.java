@@ -1,9 +1,11 @@
 package app;
 
 public class AccountPage {
-    private Account acc;
+    public Account acc;
 
-    public AccountPage() {}
+    public AccountPage() {
+
+    }
 
     public void displayAccountInfo() {
     }
@@ -11,8 +13,8 @@ public class AccountPage {
 
     public void setMeasurements(Account acc) {
         this.acc = acc;
-        acc.getInputHeight();
-        acc.getInputWeight();
+        acc.getHeight();
+        acc.getWeight();
     }
     public void logOut() {}
 }

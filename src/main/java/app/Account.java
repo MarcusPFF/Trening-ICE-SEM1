@@ -3,14 +3,17 @@ package app;
 public class Account {
     private String email;
     private String password;
-    private float inputWeight;
-    private float inputHeight;
+    private float Weight;
+    private float Height;
+    private int AccountID;
 
-    public Account(String email, String password, float inputWeight, float inputHeight) {
+    public Account(int AccountID, String email, String password, float Weight, float Height) {
     }
 
 
-    public void setEmail(String email) {}
+    public void setEmail(String email) {
+
+    }
     public String getEmail() {
         return email;
     }
@@ -20,16 +23,24 @@ public class Account {
     public String getPassword() {
         return password;
     }
-    public void setInputWeight(float inputWeight) {
-        this.inputWeight = inputWeight;
+    public void setWeight(float Weight) {
+        this.Weight = Weight;
     }
-    public float getInputWeight() {
-        return inputWeight;
+    public float getWeight() {
+        return Weight;
     }
-    public void setInputHeight(float inputHeight) {
-        this.inputHeight = inputHeight;
+    public void setHeight(float Height) {
+        this.Height = Height;
     }
-    public float getInputHeight() {
-        return inputHeight;
+    public float getHeight() {
+        return Height;
+    }
+
+    public int getAccountID() {
+        return AccountID;
+    }
+
+    public void setAccountID(int accountID) {
+        AccountID = accountID;
     }
 }
