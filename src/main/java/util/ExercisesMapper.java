@@ -46,7 +46,7 @@ public class ExercisesMapper {
         return null;
     }
 
-    public List<Workout> loadDefaultWorkoutPrograms() {
+    public void loadDefaultWorkoutPrograms() {
         String sql = "SELECT Program_ID, Program_Name FROM Programs";
 
         try {
@@ -55,19 +55,18 @@ public class ExercisesMapper {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                Workout test = new Workout(rs.getString("Program_Name"), rs.getInt("Program_ID"));
-                wo.defaultWorkoutsProgram.add(test);
+                Workout workout = new Workout(rs.getString("Program_Name"), rs.getInt("Program_ID"));
+                wo.addWorkoutToDefaultWorkoutPrograms(workout);
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
 
         }
-        return wo.defaultWorkoutsProgram;
     }
 
     // alle metoder der starter med "em." skal laves, og "em." skal slettes
-    public List<Workout> loadEarlierWorkouts() {
+    public void loadEarlierWorkouts() {
         int id = menu.ap.acc.getAccountID();
         String sql = "SELECT Set_Date, Program_ID, Program_Name, Account_ID FROM Set_history JOIN Exercises ON Set_history.Exercise_ID = Exercises.Exercise_ID WHERE Account_ID =" + id;
 
@@ -81,8 +80,8 @@ public class ExercisesMapper {
             while (rs.next()) {
                 if (menu.ap.acc.getAccountID() == rs.getInt("Account_ID")) {
                     if (SetCounterForEarlierWorkout == 1) {
-                        Workout test = new Workout(rs.getString("Program_Name"), rs.getInt("Set_Date"), rs.getInt("Program_ID"));
-                        wo.EarlierWorkouts.add(test);
+                        Workout workout = new Workout(rs.getString("Program_Name"), rs.getInt("Set_Date"), rs.getInt("Program_ID"));
+                        wo.addWorkoutToEarlierWorkouts(workout);
                     }
                     SetCounterForEarlierWorkout++;
                     if (SetCounterForEarlierWorkout == 28) {
@@ -95,10 +94,9 @@ public class ExercisesMapper {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return wo.EarlierWorkouts;
     }
 
-    public List<Exercises> loadSpecificExerciseData() {
+    public void loadSpecificExerciseData() {
         //Split skal sættes til at være lig med det som programid er i det workout objekt man vælger
         String sql = "SELECT Set_Date, Program_ID, Email, Set_Reps, Set_Weight, Exercise_Name, Set_Note FROM Set_history";
 
@@ -122,7 +120,7 @@ public class ExercisesMapper {
 
                         if (setNumber == 3) {
                             Exercises Exercises1 = new Exercises(rs.getString("Exercise_Name"), ex.getExercise(), rs.getString("Set_Note"));
-                            ex.TrainingProgram.add(Exercises1);
+                            ex.addExerciseToTrainingProgram(Exercises1);
                             ex.removeSetsFromExercise();
                         }
 
@@ -134,12 +132,11 @@ public class ExercisesMapper {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return ex.;
     }
 
 
 
-    public List<Exercises> loadLastExerciseData() {
+    public void loadLastExerciseData() {
         String sql = "SELECT Set_Date, Program_ID, Email, Set_Reps, Set_Weight, Exercise_Name, Set_Note FROM Set_history";
         try {
             Statement stmt = connect.createStatement();
@@ -158,12 +155,12 @@ public class ExercisesMapper {
                         }
 
                         Sets sets = new Sets(rs.getInt("Set_Reps"), rs.getFloat("Set_Weight"), setNumber);
-                        ex.exercise.add(sets);
+                        ex.addSetToExercise(sets);
 
                         if (setNumber == 3) {
-                            Exercises Exercise1 = new Exercises(rs.getString("Exercise_Name"), ex.exercise, rs.getString("Set_Note"));
-                            ex.TrainingProgram.add(Exercise1);
-                            ex.exercise.clear();
+                            Exercises Exercise1 = new Exercises(rs.getString("Exercise_Name"), ex.getExercise(), rs.getString("Set_Note"));
+                            ex.addExerciseToTrainingProgram(Exercise1);
+                            ex.removeSetsFromExercise();
                         }
 
                     }
@@ -174,7 +171,6 @@ public class ExercisesMapper {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return ex.TrainingProgram;
     }
 }
 

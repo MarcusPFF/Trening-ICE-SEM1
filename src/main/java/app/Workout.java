@@ -5,9 +5,9 @@ import java.util.List;
 public class Workout {
     protected String ProgramName;
     protected float ProgramDate;
-    public int ProgramID;
-    public List<Workout> EarlierWorkouts;
-    public List<Workout> defaultWorkoutsProgram;
+    protected int ProgramID;
+    protected List<Workout> EarlierWorkouts;
+    protected List<Workout> defaultWorkoutsProgram;
 
 
     public Workout(String ProgramName, float ProgramDate, int ProgramID){
@@ -18,6 +18,14 @@ public class Workout {
     public Workout(String ProgramName, int ProgramID){
         this.ProgramName = ProgramName;
         this.ProgramID = ProgramID;
+    }
+
+    public void addWorkoutToEarlierWorkouts(Workout workout){
+        EarlierWorkouts.add(workout);
+    }
+
+    public void addWorkoutToDefaultWorkoutPrograms(Workout workout){
+        defaultWorkoutsProgram.add(workout);
     }
 
     public String getProgramName() {

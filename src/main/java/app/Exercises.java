@@ -20,6 +20,10 @@ public class Exercises {
 
     }
 
+    public void addExerciseToTrainingProgram(Exercises exercises){
+        TrainingProgram.add(exercises);
+    }
+
     public void addSetToExercise(Sets sets){
         exercise.add(sets);
     }
