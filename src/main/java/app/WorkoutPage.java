@@ -11,13 +11,15 @@ public class WorkoutPage {
     private Connection connect;
     private int Account_ID;
 
+    String url = "jdbc:sqlite:/Users/jonathan/Downloads/Music Samples/CODING/CODING/Trening-ICE-SEM1/src/data/Database.db";
+
+
     public WorkoutPage(int Account_ID) {
         connectToDatabase();
         this.Account_ID = Account_ID;
     }
 
-    private void connectToDatabase() {
-        String url = "jdbc:sqlite:workout_app.db";
+    public static void connectToDatabase() {
 
         try {
             connect = DriverManager.getConnection(url);
@@ -34,7 +36,6 @@ public class WorkoutPage {
         try (PreparedStatement stmt = connect.prepareStatement(sql)) {
             stmt.setInt(1, programID);
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 exercises.add(rs.getString("Exercise_Name"));
             }

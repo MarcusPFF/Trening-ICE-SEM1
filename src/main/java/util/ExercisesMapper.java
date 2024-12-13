@@ -14,12 +14,31 @@ public class ExercisesMapper {
     private Workout wo;
     private Menu menu;
     private Connection connect;
+    String url = "jdbc:sqlite:src/data/Database.db";
+    Connection conn = DriverManager.getConnection(url);
 
-    public ExercisesMapper() {
-        // Default constructor
+    public ExercisesMapper() throws SQLException {
+        // After driver is loaded, establish connection
+        String url = "jdbc:sqlite:Database.db"; // Adjust if needed
+        connect = DriverManager.getConnection(url);
+        System.out.println("Connection to SQLite has been established in ExercisesMapper.");
     }
+
     public void setConnection(Connection connect) {
         this.connect = connect;
+    }
+
+    // Ensure menu, wo, and ex are set from outside before calling load methods
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
+    public void setWorkout(Workout wo) {
+        this.wo = wo;
+    }
+
+    public void setExercises(Exercises ex) {
+        this.ex = ex;
     }
 
     public void exConnectToDB(String url) {
@@ -33,14 +52,19 @@ public class ExercisesMapper {
 
     public List<Exercises> loadExercisesData() {
         List<Exercises> exercisesList = new ArrayList<>();
-        String sql = "SELECT Exercise_Name, Program_ID FROM Exercises";
+        // Adjust the query if you need Exercise_ID as well
+        String sql = "SELECT Exercise_ID, Exercise_Name, Program_ID FROM Exercises";
 
         try (Statement stmt = connect.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                // Load exercises and add to the list
                 String exerciseName = rs.getString("Exercise_Name");
+                // Program_ID if needed:
+                // int programId = rs.getInt("Program_ID");
+                // int exerciseId = rs.getInt("Exercise_ID");
+
+                // Adjust the Exercises constructor as needed
                 Exercises exercise = new Exercises(exerciseName, new ArrayList<>(), null);
                 exercisesList.add(exercise);
             }
@@ -51,10 +75,29 @@ public class ExercisesMapper {
     }
 
     public void saveExercise(String exerciseName, int setNumber, int setReps, float setWeight, String setNote) {
+        // First, get the Exercise_ID from the exerciseName
+        String getIdSql = "SELECT Exercise_ID FROM Exercises WHERE Exercise_Name = ?";
+        Integer exerciseId = null;
+        try (PreparedStatement ps = connect.prepareStatement(getIdSql)) {
+            ps.setString(1, exerciseName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    exerciseId = rs.getInt("Exercise_ID");
+                } else {
+                    System.out.println("No exercise with the name: " + exerciseName);
+                    return;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving exercise ID: " + e.getMessage());
+            return;
+        }
+
+        // Now insert into Set_history using the retrieved Exercise_ID
         String sql = "INSERT INTO Set_history (Exercise_ID, Set_Number, Set_Reps, Set_Weight, Set_Note) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connect.prepareStatement(sql)) {
-            stmt.setString(1, exerciseName);
+            stmt.setInt(1, exerciseId);
             stmt.setInt(2, setNumber);
             stmt.setInt(3, setReps);
             stmt.setFloat(4, setWeight);
@@ -66,6 +109,11 @@ public class ExercisesMapper {
     }
 
     public void loadDefaultWorkoutPrograms() {
+        if (wo == null) {
+            System.out.println("Workout object is not set. Cannot load default workout programs.");
+            return;
+        }
+
         String sql = "SELECT Program_ID, Program_Name FROM Programs";
 
         try (Statement stmt = connect.createStatement();
@@ -83,6 +131,11 @@ public class ExercisesMapper {
     }
 
     public void loadEarlierWorkouts() {
+        if (menu == null || menu.ap == null || menu.ap.acc == null || wo == null) {
+            System.out.println("Menu or Workout object is not set. Cannot load earlier workouts.");
+            return;
+        }
+
         int accountId = menu.ap.acc.getAccountID();
         String sql = """
             SELECT sh.Set_Date, p.Program_ID, p.Program_Name, sh.Account_ID
@@ -96,16 +149,21 @@ public class ExercisesMapper {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 int setCounter = 1;
+                Integer currentDate = null;
+                String currentProgramName = null;
+                int currentProgramId = 0;
 
                 while (rs.next()) {
-                    int programId = rs.getInt("Program_ID");
-                    String programName = rs.getString("Program_Name");
+                    currentProgramName = rs.getString("Program_Name");
+                    currentProgramId = rs.getInt("Program_ID");
                     int setDate = rs.getInt("Set_Date");
 
+                    // If it's the first set in this workout, create a new Workout object
                     if (setCounter == 1) {
-                        Workout workout = new Workout(programName, setDate, programId);
+                        Workout workout = new Workout(currentProgramName, setDate, currentProgramId);
                         wo.addWorkoutToEarlierWorkouts(workout);
                     }
+
                     setCounter = (setCounter == 28) ? 1 : setCounter + 1;
                 }
             }
@@ -115,6 +173,11 @@ public class ExercisesMapper {
     }
 
     public void loadSpecificExerciseData() {
+        if (wo == null || ex == null || menu == null || menu.ap == null || menu.ap.acc == null) {
+            System.out.println("Menu, Workout, or Exercises object is not set. Cannot load specific exercise data.");
+            return;
+        }
+
         String sql = """
             SELECT sh.Set_Date, p.Program_ID, a.Email, sh.Set_Reps, sh.Set_Weight, e.Exercise_Name, sh.Set_Note
             FROM Set_history sh
@@ -135,6 +198,7 @@ public class ExercisesMapper {
                         menu.ap.acc.getEmail().equals(rs.getString("Email")) &&
                         wo.getProgramDate() == rs.getInt("Set_Date")) {
 
+                    // Loop through sets (this logic might need refinement based on your schema)
                     for (int counter = 1; counter < 28; counter++) {
                         setNumber = (setNumber < 3) ? setNumber + 1 : 1;
 
@@ -157,6 +221,11 @@ public class ExercisesMapper {
     }
 
     public void loadLastExerciseData() {
+        if (wo == null || ex == null || menu == null || menu.ap == null || menu.ap.acc == null) {
+            System.out.println("Menu, Workout, or Exercises object is not set. Cannot load last exercise data.");
+            return;
+        }
+
         String sql = """
             SELECT sh.Set_Date, p.Program_ID, a.Email, sh.Set_Reps, sh.Set_Weight, e.Exercise_Name, sh.Set_Note
             FROM Set_history sh
@@ -175,6 +244,7 @@ public class ExercisesMapper {
                 if ((rs.getInt("Program_ID") == split && menu.ap.acc.getEmail().equals(rs.getString("Email"))) ||
                         (rs.getInt("Program_ID") == split && "default".equals(rs.getString("Email")))) {
 
+                    // Loop through sets (as per your logic)
                     for (int counter = 1; counter < 28; counter++) {
                         setNumber = (setNumber < 3) ? setNumber + 1 : 1;
 

@@ -3,44 +3,55 @@ package app;
 public class Account {
     private String email;
     private String password;
-    private float Weight;
-    private float Height;
-    private int AccountID;
+    private float weight;
+    private float height;
+    private int accountID;
 
-    public Account(int AccountID, String email, String password, float Weight, float Height) {
+    public Account(int accountID, String email, String password, float weight, float height) {
+        this.accountID = accountID;
+        this.email = email;
+        this.password = password;
+        this.weight = weight;
+        this.height = height;
     }
 
-
-    public void setEmail(String email) {
-
-    }
     public String getEmail() {
         return email;
     }
-    public void setPassword(String password) {
-        this.password = password;
+
+    public void setEmail(String email) {
+        this.email = email;
     }
+
     public String getPassword() {
         return password;
     }
-    public void setWeight(float Weight) {
-        this.Weight = Weight;
+
+    public void setPassword(String password) {
+        this.password = password;
     }
+
     public float getWeight() {
-        return Weight;
+        return weight;
     }
-    public void setHeight(float Height) {
-        this.Height = Height;
+
+    public void setWeight(float weight) {
+        this.weight = weight;
     }
+
     public float getHeight() {
-        return Height;
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
     }
 
     public int getAccountID() {
-        return AccountID;
+        return accountID;
     }
 
     public void setAccountID(int accountID) {
-        AccountID = accountID;
+        this.accountID = accountID;
     }
 }
