@@ -5,9 +5,9 @@ import util.ExercisesMapper;
 
 public class Main {
    public static void main(String[] args) {
-       //JFrameGUI jFrameGUI = new JFrameGUI();
+       JFrameGUI jFrameGUI = new JFrameGUI();
        ExercisesMapper em = new ExercisesMapper();
-       //jFrameGUI.launchGUI();
+       jFrameGUI.launchGUI();
        System.out.println("skibidi");
        var url = "jdbc:sqlite:Database.db";
        em.exConnectToDB(url);
