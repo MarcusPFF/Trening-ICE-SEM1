@@ -10,21 +10,22 @@ public class Workout {
     protected List<Workout> defaultWorkoutsProgram;
 
 
-    public Workout(String ProgramName, float ProgramDate, int ProgramID){
+    public Workout(String ProgramName, float ProgramDate, int ProgramID) {
         this.ProgramName = ProgramName;
         this.ProgramDate = ProgramDate;
         this.ProgramID = ProgramID;
     }
-    public Workout(String ProgramName, int ProgramID){
+
+    public Workout(String ProgramName, int ProgramID) {
         this.ProgramName = ProgramName;
         this.ProgramID = ProgramID;
     }
 
-    public void addWorkoutToEarlierWorkouts(Workout workout){
+    public void addWorkoutToEarlierWorkouts(Workout workout) {
         EarlierWorkouts.add(workout);
     }
 
-    public void addWorkoutToDefaultWorkoutPrograms(Workout workout){
+    public void addWorkoutToDefaultWorkoutPrograms(Workout workout) {
         defaultWorkoutsProgram.add(workout);
     }
 
