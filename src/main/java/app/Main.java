@@ -9,6 +9,5 @@ public class Main {
        ExercisesMapper em = new ExercisesMapper();
        jFrameGUI.launchGUI();
 
-
     }
 }
