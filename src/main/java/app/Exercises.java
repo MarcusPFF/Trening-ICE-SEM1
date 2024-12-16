@@ -1,14 +1,13 @@
 package app;
 
-import util.ExercisesMapper;
 
 import java.util.List;
 import java.util.Set;
 
 public class Exercises {
-    protected ExercisesMapper em;
     protected String exerciseName;
     protected String note;
+    protected String date;
     protected List<Sets> exercise;
     protected List<Exercises> TrainingProgram;
 
@@ -17,7 +16,11 @@ public class Exercises {
         this.exerciseName = exerciseName;
         this.exercise = exercise;
         this.note = note;
+    }
 
+    public Exercises(String exerciseName, String date) {
+       this.exerciseName = exerciseName;
+       this.date = date;
     }
 
     public void addExerciseToTrainingProgram(Exercises exercises){

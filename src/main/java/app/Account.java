@@ -7,12 +7,30 @@ import javax.swing.*;
 public class Account {
     private String email;
     private String password;
+
+    private float Weight;
+    private float Height;
+    private String currentEmail;
+    private float currentWeight;
+    private float currentHeight;
+
     private float weight;
     private float height;
     private JTextField heightField;
     private JTextField weightField;
 
+
     public Account(String email, String password, float Weight, float Height) {
+        this.email = email;
+        this.password = password;
+        this.Weight = Weight;
+        this.Height = Height;
+    }
+
+    public Account(String currentEmail, float CurrentWeight, float CurrentHeight) {
+          this.currentEmail = currentEmail;
+          this.currentWeight = CurrentWeight;
+          this.currentHeight = CurrentHeight;
     }
 
 
@@ -41,6 +59,33 @@ public class Account {
     public float getHeight() {
         return height;
     }
+
+
+
+    public String getCurrentEmail() {
+        return currentEmail;
+    }
+
+    public void setCurrentEmail(String currentEmail) {
+        this.currentEmail = currentEmail;
+    }
+
+    public float getCurrentWeight() {
+        return currentWeight;
+    }
+
+    public void setCurrentWeight(float currentWeight) {
+        this.currentWeight = currentWeight;
+    }
+
+    public float getCurrentHeight() {
+        return currentHeight;
+    }
+
+    public void setCurrentHeight(float currentHeight) {
+        this.currentHeight = currentHeight;
+    }
+}
 
     public void setCurrentWeight() {
         try {
