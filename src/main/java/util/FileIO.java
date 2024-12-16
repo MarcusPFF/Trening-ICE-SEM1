@@ -24,7 +24,7 @@ public class FileIO {
         String accountPathFile = "src/data/accountsData/Accounts.csv";
         String exercisesPath = "src/data/Exercises.txt";
         String earlierExercisesPath = folderPath + "earlierExercises.txt";
-        String loadLastExercisePath = folderPath + acc.getCurrentEmail() + "_exerciseData" + getSplit();
+        String lastExercisePath = folderPath + acc.getCurrentEmail() + "_exerciseData" + getSplit();
 
     }
 
