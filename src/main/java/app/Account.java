@@ -5,8 +5,21 @@ public class Account {
     private String password;
     private float Weight;
     private float Height;
+    private String currentEmail;
+    private float currentWeight;
+    private float currentHeight;
 
     public Account(String email, String password, float Weight, float Height) {
+        this.email = email;
+        this.password = password;
+        this.Weight = Weight;
+        this.Height = Height;
+    }
+
+    public Account(String currentEmail, float CurrentWeight, float CurrentHeight) {
+          this.currentEmail = currentEmail;
+          this.currentWeight = CurrentWeight;
+          this.currentHeight = CurrentHeight;
     }
 
 
@@ -42,4 +55,28 @@ public class Account {
         return Height;
     }
 
+
+    public String getCurrentEmail() {
+        return currentEmail;
+    }
+
+    public void setCurrentEmail(String currentEmail) {
+        this.currentEmail = currentEmail;
+    }
+
+    public float getCurrentWeight() {
+        return currentWeight;
+    }
+
+    public void setCurrentWeight(float currentWeight) {
+        this.currentWeight = currentWeight;
+    }
+
+    public float getCurrentHeight() {
+        return currentHeight;
+    }
+
+    public void setCurrentHeight(float currentHeight) {
+        this.currentHeight = currentHeight;
+    }
 }

@@ -1,0 +1,28 @@
+Nr, ExerciseName, ID
+1,Bench Press,1
+2,Overhead Press,1
+3,Incline Dumbbell Press,1
+4,Push-Ups,1
+5,Dips,1
+6,Dumbbell Lateral Raise,1
+7,Cable Chest Fly,1
+8,Tricep Pushdown,1
+9,Dumbbell Front Raise,1
+10,Pull-Ups,2
+11,Barbell Row,2
+12,Deadlift,2
+13,Lat Pulldown,2
+14,Face Pulls,2
+15,Bicep Curl,2
+16,Dumbbell Rear Delt Fly,2
+17,T-Bar Row,2
+18,Cable Row,2
+19,Squats,3
+20,Leg Press,3
+21,Lunges,3
+22,Romanian Deadlift,3
+23,Leg Curls,3
+24,Leg Extensions,3
+25,Calf Raises,3
+26,Step-Ups,3
+27,Bulgarian Split Squats,3
