@@ -24,4 +24,7 @@ public class AccountPage {
     public float getWeight() {
         return weight;
     }
+
+
+
 }
