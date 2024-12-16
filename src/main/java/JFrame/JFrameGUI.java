@@ -1,11 +1,14 @@
 package JFrame;
-
 import app.Account;
+
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URI;
 import java.util.ArrayList;
+import java.io.File;
 
 public class JFrameGUI extends JFrame {
     private JPanel mainPanel;
@@ -13,6 +16,9 @@ public class JFrameGUI extends JFrame {
     Account acc;
     private ArrayList<String> loadEarlierWorkouts = new ArrayList<>();
     private DefaultListModel<String> listModel = new DefaultListModel<>();
+    JLabel messageLabel = new JLabel();
+    FileIO io = new FileIO;
+
 
     public void launchGUI() {
         displayLoginGUI();
@@ -58,7 +64,7 @@ public class JFrameGUI extends JFrame {
         menu1.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         /* Indsæt acc.getEmail() */
-        JLabel homePage = new JLabel("Welcome back: ", JLabel.CENTER);
+        JLabel homePage = new JLabel("Welcome back ", JLabel.CENTER);
         homePage.setFont(new Font("Roboto", Font.BOLD, 24));
         homePage.setForeground(new Color(255, 255, 255));
         homePage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -194,6 +200,7 @@ public class JFrameGUI extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
+
         /* Setup på vindue */
         setTitle("Trening - App for Muscle Growth");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -250,16 +257,67 @@ public class JFrameGUI extends JFrame {
         cardLayout.show(mainPanel, "Login");
 
         loginButton.addActionListener(e -> {
-            displayMenuGUI();
-            cardLayout.show(mainPanel, "Menu");
+            io.loadAccountData();
+
+            String email = emailField.getText();
+            String password = String.valueOf(passwordField.getPassword());
+
+            for (Account acc : accounts) {
+                if (email == getCurrentEmail && password == getCurrentPassword) {
+                    displayMenuGUI();
+                    cardLayout.show(mainPanel, "Menu");
+                } else {
+                    messageLabel.setText("Invalid email or username");
+                }
+            }
         });
 
-        createAccountButton.addActionListener(e -> {
-            displayMenuGUI();
-            cardLayout.show(mainPanel, "Menu");
+
+        createAccountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                io.loadAccountData();
+
+                String email = emailField.getText();
+                String password = String.valueOf(passwordField.getPassword());// Get the username
+
+                if (email.contains("@") && email.contains(".") && password.length() >= 8 && !email.isEmpty() && !password.isEmpty()) {
+                    // Store account
+                    int accountWithThisEmail = 0;
+                    for (Account acc : accounts) {
+                        if (email == acc.getEmail()) {
+                            accountWithThisEmail++;
+                        }
+                    }
+                    if (accountWithThisEmail == 0) {
+                        accounts.add(acc.setEmail(email), acc.setPassword(password), acc.setWeight(0), acc.setHeight(0));
+                        io.saveAccountData();
+                        messageLabel.setText("Account created successfully!");
+                        String folderPath = "minNyeMappe";
+                        File folder = new File(folderPath);
+                        if (!folder.exists()) {
+                            if (folder.mkdir()) {
+                                System.out.println("Mappen blev oprettet: " + folderPath);
+                            } else {
+                                System.out.println("Kunne ikke oprette mappen: " + folderPath);
+                            }
+                        } else {
+                            System.out.println("Mappen eksisterer allerede.");
+                        }
+                        displayMenuGUI();
+                        cardLayout.show(mainPanel, "Menu");
+                    } else {
+                        messageLabel.setText("Email is already in use");
+                    }
+                } else {
+                    messageLabel.setForeground(Color.red);
+                    messageLabel.setText("Invalid email, username, or password (min 8 characters).");
+                }
+            }
         });
 
         setVisible(true);
+
 
     }
 
