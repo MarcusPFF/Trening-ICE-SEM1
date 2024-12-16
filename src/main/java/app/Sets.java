@@ -7,6 +7,7 @@ public class Sets {
     private float weight;
     private String note;
 
+    //Konstruktør til Sets
     public Sets(String exerciseName, int setNumber, int reps, float weight, String note) {
         this.exerciseName = exerciseName;
         this.setNumber = setNumber;
@@ -15,6 +16,11 @@ public class Sets {
         this.note = note;
     }
 
+    public Sets() {
+
+    }
+
+    //Setters og getters til Sets - variable
     public String getExerciseName() {
         return exerciseName;
     }

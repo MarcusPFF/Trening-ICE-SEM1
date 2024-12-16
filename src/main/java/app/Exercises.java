@@ -11,30 +11,39 @@ public class Exercises {
     protected List<Sets> exercise;
     protected List<Exercises> TrainingProgram;
 
-
+    //Konstruktør nr. 1
     public Exercises(String exerciseName, List<Sets> exercise, String note) {
         this.exerciseName = exerciseName;
         this.exercise = exercise;
         this.note = note;
     }
 
+    //Konstruktør nr. 2
     public Exercises(String exerciseName, String date) {
        this.exerciseName = exerciseName;
        this.date = date;
     }
 
+    public Exercises(){
+    }
+
+    //Adder exercises til programmet
     public void addExerciseToTrainingProgram(Exercises exercises){
         TrainingProgram.add(exercises);
     }
 
+    //Adder sets til exercises
     public void addSetToExercise(Sets sets){
         exercise.add(sets);
     }
 
+    //Fjerner alt fra exercises
     public void removeSetsFromExercise(){
         exercise.clear();
     }
 
+
+    //Getters og setters
     public String getExerciseName() {
         return exerciseName;
     }

@@ -1,24 +1,40 @@
 package JFrame;
-import app.Account;
 
+import app.Account;
+import util.FileIO;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
-import java.io.File;
+import java.util.List;
 
 public class JFrameGUI extends JFrame {
     private JPanel mainPanel;
     private CardLayout cardLayout;
-    Account acc;
-    private ArrayList<String> loadEarlierWorkouts = new ArrayList<>();
-    private DefaultListModel<String> listModel = new DefaultListModel<>();
-    JLabel messageLabel = new JLabel();
-    FileIO io = new FileIO;
+    private Account acc;
+    private FileIO io;
+    private List<String> loadEarlierWorkouts;
+    private DefaultListModel<String> listModel;
+    private JLabel messageLabel;
+    private List<Account> accounts;
+    private Account currentAccount;
 
+    public JFrameGUI() {
+        this.cardLayout = new CardLayout();
+        this.mainPanel = new JPanel(cardLayout);
+        this.loadEarlierWorkouts = new ArrayList<>();
+        this.listModel = new DefaultListModel<>();
+        this.messageLabel = new JLabel();
+        this.acc = new Account();
+        this.io = new FileIO();
+        this.accounts = io.getAccounts();
+        this.currentAccount = new Account(acc.getCurrentEmail(), acc.getCurrentWeight(), acc.getCurrentHeight());
+
+    }
 
     public void launchGUI() {
         displayLoginGUI();
@@ -162,11 +178,24 @@ public class JFrameGUI extends JFrame {
         gbc.gridy = row++;
         formPanel.add(saveLabel, gbc);
 
-        JButton saveKnap = createModernButton("Save");
+        JButton saveButton = createModernButton("Save");
         gbc.gridx = 0;
         gbc.gridy = row++;
-        formPanel.add(saveKnap, gbc);
+        formPanel.add(saveButton, gbc);
         menu4.add(formPanel, BorderLayout.CENTER);
+
+        saveButton.addActionListener(e -> {
+            String currentHeightString = heightField.getText().trim();
+            String currentWeightString = weightField.getText().trim();
+
+            String heightText = acc.validateSetCurrentHeight(currentHeightString);
+            String weightText = acc.validateSetCurrentWeight(currentWeightString);
+            acc.validateSetCurrentHeight(currentHeightString);
+            acc.validateSetCurrentWeight(currentWeightString);
+            io.saveAccountData("src/data/accountsData/Accounts.csv", accounts);
+
+            JOptionPane.showMessageDialog(formPanel, heightText + "\n" + weightText);
+        });
 
         JButton logoutButton = createModernButton("Logout");
         menu4.add(logoutButton, BorderLayout.SOUTH);
@@ -257,64 +286,99 @@ public class JFrameGUI extends JFrame {
         cardLayout.show(mainPanel, "Login");
 
         loginButton.addActionListener(e -> {
-            io.loadAccountData();
+            if (io == null) {
+                messageLabel.setForeground(Color.RED);
+                messageLabel.setText("System error: FileIO not initialized.");
+                return;
+            }
 
-            String email = emailField.getText();
+            io.loadAccountData("src/data/accountsData/Accounts.csv");
+            List<Account> accounts = io.getAccounts();
+            String email = emailField.getText().trim();
             String password = String.valueOf(passwordField.getPassword());
-
+            boolean validCredentials = false;
             for (Account acc : accounts) {
-                if (email == getCurrentEmail && password == getCurrentPassword) {
-                    displayMenuGUI();
-                    cardLayout.show(mainPanel, "Menu");
-                } else {
-                    messageLabel.setText("Invalid email or username");
+                if (email.equals(acc.getEmail()) && password.equals(acc.getPassword())) {
+                    validCredentials = true;
+                    currentAccount.setCurrentEmail(email);
+                    break;
                 }
+            }
+            if (validCredentials) {
+                displayMenuGUI();
+                cardLayout.show(mainPanel, "Menu");
+            } else {
+                messageLabel.setForeground(Color.RED);
+                messageLabel.setText("Invalid email or password");
             }
         });
 
 
         createAccountButton.addActionListener(new ActionListener() {
+
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                io.loadAccountData();
 
-                String email = emailField.getText();
-                String password = String.valueOf(passwordField.getPassword());// Get the username
+                if (io == null) {
+                    messageLabel.setForeground(Color.RED);
+                    messageLabel.setText("System error: FileIO not initialized.");
+                    return;
+                }
 
-                if (email.contains("@") && email.contains(".") && password.length() >= 8 && !email.isEmpty() && !password.isEmpty()) {
-                    // Store account
+                // Load account data (ensure that this method actually returns or sets the accounts list)
+                io.loadAccountData("src/data/accountsData/Accounts.csv");
+                // Retrieve the accounts from io (assuming there's a getter)
+                String email = emailField.getText().trim();
+                String password = String.valueOf(passwordField.getPassword());
+
+                // Validate email and password
+                if (!email.isEmpty() && !password.isEmpty()
+                        && email.contains("@") && email.contains(".")
+                        && password.length() >= 8) {
+
+                    // Check if account with this email already exists
                     int accountWithThisEmail = 0;
                     for (Account acc : accounts) {
-                        if (email == acc.getEmail()) {
-                            accountWithThisEmail++;
+                        if (email.equals(acc.getEmail())) {
+                            accountWithThisEmail = 1;
                         }
                     }
                     if (accountWithThisEmail == 0) {
-                        accounts.add(acc.setEmail(email), acc.setPassword(password), acc.setWeight(0), acc.setHeight(0));
-                        io.saveAccountData();
+                        // Create a new account and set its properties
+                        accounts.add(new Account(email, password, 0, 0));
+                        currentAccount.setCurrentEmail(email);
+                        currentAccount.setCurrentWeight(0);
+                        currentAccount.setCurrentHeight(0);
+                        io.saveAccountData("src/data/accountsData/Accounts.csv", accounts);
+                        messageLabel.setForeground(Color.BLACK);
                         messageLabel.setText("Account created successfully!");
-                        String folderPath = "minNyeMappe";
-                        File folder = new File(folderPath);
+
+                        // Create directory if it doesn't exist
+                        String folderName = email;
+                        File folder = new File("src/data/accountsData/" + folderName);
                         if (!folder.exists()) {
                             if (folder.mkdir()) {
-                                System.out.println("Mappen blev oprettet: " + folderPath);
+                                System.out.println("Folder created: " + folderName);
                             } else {
-                                System.out.println("Kunne ikke oprette mappen: " + folderPath);
+                                System.out.println("Could not create folder: " + folderName);
                             }
                         } else {
-                            System.out.println("Mappen eksisterer allerede.");
+                            System.out.println("Folder already exists.");
                         }
                         displayMenuGUI();
                         cardLayout.show(mainPanel, "Menu");
                     } else {
+                        messageLabel.setForeground(Color.RED);
                         messageLabel.setText("Email is already in use");
                     }
                 } else {
-                    messageLabel.setForeground(Color.red);
-                    messageLabel.setText("Invalid email, username, or password (min 8 characters).");
+                    messageLabel.setForeground(Color.RED);
+                    messageLabel.setText("Invalid email or password (password must be min 8 characters).");
                 }
             }
         });
+
 
         setVisible(true);
 

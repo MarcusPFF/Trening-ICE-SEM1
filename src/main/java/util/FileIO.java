@@ -18,8 +18,15 @@ public class FileIO {
     private Exercises ex;
     private Workout wo;
     private Sets sets;
+    protected ArrayList<Account> accounts;
 
     public FileIO() {
+        this.accounts = new ArrayList<>();
+        this.menu = new Menu();
+        this.acc = new Account();
+        this.ex = new Exercises();
+        this.wo = new Workout();
+        this.sets = new Sets();
         String folderPath = "src/data/accountsData/" + acc.getCurrentEmail() + "/";
         String accountPathFile = "src/data/accountsData/Accounts.csv";
         String exercisesPath = "src/data/Exercises.txt";
@@ -34,17 +41,19 @@ public class FileIO {
  Reads each line of the file, splits it by commas, and creates User objects with the data.
 */
 
-    public List<Account> loadAccountData(String accountPath) {
-        List<Account> accounts = new ArrayList<>();
-        File file = new File(accountPath);
 
+    public List<Account> loadAccountData(String accountPath) {
+        accounts.clear();
+        File file = new File(accountPath);
         if (!file.exists()) {
             System.out.println("Brugerdatafil ikke fundet: " + accountPath);
             return accounts;
         }
 
         try (Scanner scanner = new Scanner(file)) {
-            scanner.nextLine(); // Skip header
+            if (scanner.hasNextLine()) {
+                scanner.nextLine(); // Skip header
+            }
             while (scanner.hasNextLine()) {
                 String[] data = scanner.nextLine().split(",");
                 if (data.length == 4) {
@@ -72,11 +81,11 @@ public class FileIO {
 
         try (FileWriter writer = new FileWriter(file)) {
             writer.write("Email,Password,Weight,Height\n");
-            for (Account acc : accounts) {
-                if (acc.getEmail() == acc.getCurrentEmail()) {
-                    writer.write(acc.getEmail() + "," + acc.getPassword() + "," + acc.getCurrentWeight() + "," + acc.getCurrentHeight() + "\n");
+            for (Account account : accounts) {
+                if (account.getEmail() == acc.getCurrentEmail()) {
+                    writer.write(account.getEmail() + "," + account.getPassword() + "," + acc.getCurrentWeight() + "," + acc.getCurrentHeight() + "\n");
                 } else {
-                    writer.write(acc.getEmail() + "," + acc.getPassword() + "," + acc.getWeight() + "," + acc.getHeight() + "\n");
+                    writer.write(account.getEmail() + "," + account.getPassword() + "," + account.getWeight() + "," + account.getHeight() + "\n");
                 }
             }
         } catch (IOException e) {
@@ -186,5 +195,13 @@ public class FileIO {
 
     public void setSplit(String split) {
         this.split = split;
+    }
+
+    public ArrayList<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(ArrayList<Account> accounts) {
+        this.accounts = accounts;
     }
 }

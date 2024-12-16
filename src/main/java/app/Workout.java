@@ -21,6 +21,9 @@ public class Workout {
         this.ProgramID = ProgramID;
     }
 
+    public Workout(){
+    }
+
     public void addWorkoutToEarlierWorkouts(Workout workout) {
         EarlierWorkouts.add(workout);
     }

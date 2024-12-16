@@ -7,36 +7,39 @@ import javax.swing.*;
 public class Account {
     private String email;
     private String password;
-
     private float Weight;
     private float Height;
     private String currentEmail;
     private float currentWeight;
     private float currentHeight;
+    protected String heightText;
+    protected String weightText;
 
     private float weight;
     private float height;
     private JTextField heightField;
     private JTextField weightField;
 
-
+    //Konstruktør til account
     public Account(String email, String password, float Weight, float Height) {
         this.email = email;
         this.password = password;
         this.Weight = Weight;
         this.Height = Height;
     }
-
+    //Konstruktør til account
     public Account(String currentEmail, float CurrentWeight, float CurrentHeight) {
-          this.currentEmail = currentEmail;
-          this.currentWeight = CurrentWeight;
-          this.currentHeight = CurrentHeight;
+        this.currentEmail = currentEmail;
+        this.currentWeight = CurrentWeight;
+        this.currentHeight = CurrentHeight;
     }
 
-
-    public void setEmail(String email) {
+    public Account(){
 
     }
+
+    //Getters og setters
+    public void setEmail(String email) {this.email = email; }
 
     public String getEmail() {
         return email;
@@ -61,13 +64,13 @@ public class Account {
     }
 
 
-
     public String getCurrentEmail() {
         return currentEmail;
     }
 
-    public void setCurrentEmail(String currentEmail) {
+    public String setCurrentEmail(String currentEmail) {
         this.currentEmail = currentEmail;
+        return currentEmail;
     }
 
     public float getCurrentWeight() {
@@ -85,39 +88,63 @@ public class Account {
     public void setCurrentHeight(float currentHeight) {
         this.currentHeight = currentHeight;
     }
-}
 
-    public void setCurrentWeight() {
+
+    // Efter vægt er skrevet ind kigger denne metode igennem om svaret er indefor normalvægt og om det er et tal.
+    public String validateSetCurrentWeight(String currentWeightString) {
         try {
-            String weightString = weightField.getText();
-            float weight = Float.parseFloat(weightString);
+            //currentWeightString = weightField.getText();
+            float currentWeight = Float.parseFloat(currentWeightString);
 
-            if (weight >= 40.0 && weight <= 300.0) {
-                this.weight = weight;
-                System.out.println("Vægt opdateret til: " + weight);
+            if (currentWeight >= 40.0 && currentWeight <= 300.0) {
+                setCurrentWeight(currentWeight);
+                weightText = "Vægt opdateret til: " + currentWeight;
+                return weightText;
             } else {
-                JFrameGUI.messageLabel.setText("Indtast venligst en vægt mellem 40-300kg");
+                weightText = "Indtast venligst en vægt mellem 40-300kg";
+                return weightText;
             }
         } catch (NumberFormatException e) {
             // Håndter fejl, hvis input ikke kan konverteres til et tal
-            JFrameGUI.messageLabel.setText("Der skete en uventet fejl - prøv igen senere.");
+            weightText = "Der skete en uventet fejl - prøv igen senere.";
+            return weightText;
         }
     }
 
-    public void setCurrentHeight() {
+    // Efter højde er skrevet ind kigger denne metode igennem om svaret er indefor normalhøjde og om det er et tal.
+    public String validateSetCurrentHeight(String currentHeightString) {
         try {
-            String heightString = heightField.getText();
-            float height = Float.parseFloat(heightString);
+            //currentHeightString = heightField.getText();
+            float currentHeight = Float.parseFloat(currentHeightString);
 
-            if (height >= 100.0 && height <= 220.0) {
-                this.height = height;
-                System.out.println("Højde opdateret til: " + height);
+            if (currentHeight >= 100.0 && currentHeight <= 220.0) {
+                setCurrentHeight(currentHeight);
+                heightText = "Højde opdateret til: " + currentHeight;
+                return heightText;
             } else {
-                JFrameGUI.messageLabel.setText("Indtast venligst en højde mellem 100-220cm.");
+               heightText = "Indtast venligst en højde mellem 100-220cm.";
+               return heightText;
             }
         } catch (NumberFormatException e) {
             // Håndter fejl, hvis input ikke kan konverteres til et tal
-            JFrameGUI.messageLabel.setText("Der skete en uventet fejl - prøv igen senere.");
+            heightText = "Der skete en uventet fejl - prøv igen senere.";
+            return heightText;
         }
+    }
+
+    public String getHeightText() {
+        return heightText;
+    }
+
+    public void setHeightText(String heightText) {
+        this.heightText = heightText;
+    }
+
+    public String getWeightText() {
+        return weightText;
+    }
+
+    public void setWeightText(String weightText) {
+        this.weightText = weightText;
     }
 }

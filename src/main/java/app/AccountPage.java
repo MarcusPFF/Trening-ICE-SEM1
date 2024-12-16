@@ -6,21 +6,17 @@ public class AccountPage {
     private float weight;
 
 
-    public AccountPage() {
-
-    }
+    public AccountPage() {}
 
     public void displayAccountInfo() {
     }
 
-    public void logOut() {
+    public void logOut() {}
 
-    }
-
+    //Getters til height
     public float getHeight() {
         return height;
     }
-
     public float getWeight() {
         return weight;
     }
