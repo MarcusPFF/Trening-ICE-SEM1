@@ -8,9 +8,6 @@ public class Main {
        JFrameGUI jFrameGUI = new JFrameGUI();
        ExercisesMapper em = new ExercisesMapper();
        jFrameGUI.launchGUI();
-       System.out.println("skibidi");
-       var url = "jdbc:sqlite:Database.db";
-       em.exConnectToDB(url);
 
 
     }
