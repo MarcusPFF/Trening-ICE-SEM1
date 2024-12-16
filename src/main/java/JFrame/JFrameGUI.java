@@ -190,9 +190,9 @@ public class JFrameGUI extends JFrame {
 
             String heightText = acc.validateSetCurrentHeight(currentHeightString);
             String weightText = acc.validateSetCurrentWeight(currentWeightString);
-            acc.validateSetCurrentHeight(currentHeightString);
-            acc.validateSetCurrentWeight(currentWeightString);
-            io.saveAccountData("src/data/accountsData/Accounts.csv", accounts);
+            currentAccount.validateSetCurrentHeight(currentHeightString);
+            currentAccount.validateSetCurrentWeight(currentWeightString);
+            io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, currentAccount.getCurrentEmail());
 
             JOptionPane.showMessageDialog(formPanel, heightText + "\n" + weightText);
         });
@@ -315,8 +315,6 @@ public class JFrameGUI extends JFrame {
 
 
         createAccountButton.addActionListener(new ActionListener() {
-
-
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -350,7 +348,7 @@ public class JFrameGUI extends JFrame {
                         currentAccount.setCurrentEmail(email);
                         currentAccount.setCurrentWeight(0);
                         currentAccount.setCurrentHeight(0);
-                        io.saveAccountData("src/data/accountsData/Accounts.csv", accounts);
+                        io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, currentAccount.getCurrentEmail());
                         messageLabel.setForeground(Color.BLACK);
                         messageLabel.setText("Account created successfully!");
 
@@ -454,5 +452,13 @@ public class JFrameGUI extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         return panel;
+    }
+
+    public Account getCurrentAccount() {
+        return currentAccount;
+    }
+
+    public void setCurrentAccount(Account currentAccount) {
+        this.currentAccount = currentAccount;
     }
 }

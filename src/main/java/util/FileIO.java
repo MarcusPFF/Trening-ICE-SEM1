@@ -1,5 +1,6 @@
 package util;
 
+import JFrame.JFrameGUI;
 import app.*;
 
 import java.io.File;
@@ -75,14 +76,14 @@ public class FileIO {
      Writes the user details (username, password, and validate (which is in this case admin status) for each user in the list to the file.
     */
 
-    public void saveAccountData(String filePath, List<Account> accounts) {
+    public void saveAccountData(String filePath, List<Account> accounts, String currentEmail) {
         File file = new File(filePath);
         file.getParentFile().mkdirs();
 
         try (FileWriter writer = new FileWriter(file)) {
             writer.write("Email,Password,Weight,Height\n");
             for (Account account : accounts) {
-                if (account.getEmail() == acc.getCurrentEmail()) {
+                if (account.getEmail() == currentEmail) {
                     writer.write(account.getEmail() + "," + account.getPassword() + "," + acc.getCurrentWeight() + "," + acc.getCurrentHeight() + "\n");
                 } else {
                     writer.write(account.getEmail() + "," + account.getPassword() + "," + account.getWeight() + "," + account.getHeight() + "\n");
