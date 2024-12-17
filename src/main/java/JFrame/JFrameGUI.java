@@ -7,12 +7,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JFrameGUI extends JFrame {
+    protected String currentWeightString;
     private JPanel mainPanel;
     private CardLayout cardLayout;
     private Account acc;
@@ -173,6 +176,16 @@ public class JFrameGUI extends JFrame {
         gbc.gridy = row++;
         formPanel.add(weightField, gbc);
 
+        for (Account acc : accounts) {
+            System.out.println(acc.getEmail());
+            System.out.println(currentAccount.getCurrentEmail());
+            if (acc.getEmail().equals(currentAccount.getCurrentEmail())) {
+                heightField.setText(String.valueOf((acc.getHeight())));
+                weightField.setText(String.valueOf((acc.getWeight())));
+                System.out.println(weightField);
+            }
+        }
+
         JLabel saveLabel = new JLabel("Click Save to save your data:");
         gbc.gridx = 0;
         gbc.gridy = row++;
@@ -183,16 +196,28 @@ public class JFrameGUI extends JFrame {
         gbc.gridy = row++;
         formPanel.add(saveButton, gbc);
         menu4.add(formPanel, BorderLayout.CENTER);
-
         saveButton.addActionListener(e -> {
-            String currentHeightString = heightField.getText().trim();
-            String currentWeightString = weightField.getText().trim();
+            float currentHeightString = 0;
+            float currentWeightString = 0;
+            String heightText = "Indtast venligst en højde mellem 100-220cm.";
+            String weightText = "Indtast venligst en vægt mellem 40-300kg";
+            io.loadAccountData("src/data/accountsData/Accounts.csv");
 
-            String heightText = acc.validateSetCurrentHeight(currentHeightString);
-            String weightText = acc.validateSetCurrentWeight(currentWeightString);
-            currentAccount.validateSetCurrentHeight(currentHeightString);
-            currentAccount.validateSetCurrentWeight(currentWeightString);
-            io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, currentAccount.getCurrentEmail());
+            if (Float.parseFloat(heightField.getText().trim()) >= 100.0 && Float.parseFloat(heightField.getText().trim()) <= 220.0) {
+                currentHeightString = Float.parseFloat(heightField.getText().trim());
+                heightText = acc.validateSetCurrentHeight(currentHeightString);
+                currentAccount.validateSetCurrentHeight(currentHeightString);
+            }
+            if (Float.parseFloat(weightField.getText().trim()) >= 40 && Float.parseFloat(weightField.getText().trim()) <= 300) {
+                currentWeightString = Float.parseFloat(weightField.getText().trim());
+                weightText = acc.validateSetCurrentWeight(currentWeightString);
+                currentAccount.validateSetCurrentWeight(currentWeightString);
+            }
+            if (Float.parseFloat(weightField.getText().trim()) >= 40 && Float.parseFloat(weightField.getText().trim()) <= 300 && Float.parseFloat(heightField.getText().trim()) >= 100.0 && Float.parseFloat(heightField.getText().trim()) <= 220.0) {
+
+                io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, currentAccount.getCurrentEmail(), currentWeightString, currentHeightString);
+            }
+
 
             JOptionPane.showMessageDialog(formPanel, heightText + "\n" + weightText);
         });
@@ -345,10 +370,10 @@ public class JFrameGUI extends JFrame {
                     if (accountWithThisEmail == 0) {
                         // Create a new account and set its properties
                         accounts.add(new Account(email, password, 0, 0));
-                        currentAccount.setCurrentEmail(email);
-                        currentAccount.setCurrentWeight(0);
-                        currentAccount.setCurrentHeight(0);
-                        io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, currentAccount.getCurrentEmail());
+                        acc.setEmail(email);
+                        acc.setWeight(0);
+                        acc.setHeight(0);
+                        io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, acc.getEmail(), acc.getWeight(), acc.getHeight());
                         messageLabel.setForeground(Color.BLACK);
                         messageLabel.setText("Account created successfully!");
 
@@ -427,12 +452,12 @@ public class JFrameGUI extends JFrame {
         button.setOpaque(true);
         button.setBorder(BorderFactory.createCompoundBorder(button.getBorder(), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
 
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        button.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
                 button.setBackground(new Color(255, 100, 50));
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 button.setBackground(new Color(236, 91, 41));
             }
         });
@@ -454,11 +479,19 @@ public class JFrameGUI extends JFrame {
         return panel;
     }
 
-    public Account getCurrentAccount() {
-        return currentAccount;
+    public String getCurrentAccountWeight() {
+        return currentWeightString;
     }
 
     public void setCurrentAccount(Account currentAccount) {
         this.currentAccount = currentAccount;
+    }
+
+
+    @Override
+    public String toString() {
+        return "JFrameGUI{" +
+                "acc=" + acc +
+                '}';
     }
 }
