@@ -231,6 +231,7 @@ public class JFrameGUI extends JFrame {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+
         });
 
         /* Tilføjer knapperne til vores sidePanel */
