@@ -230,12 +230,6 @@ public class JFrameGUI extends JFrame {
                 io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, currentAccount.getCurrentEmail(), currentWeightString, currentHeightString);
             }
 
-            String heightText = acc.validateSetCurrentHeight(Float.parseFloat(currentHeightString));
-            String weightText = acc.validateSetCurrentWeight(Float.parseFloat(currentWeightString));
-            currentAccount.validateSetCurrentHeight(Float.parseFloat(currentHeightString));
-            currentAccount.validateSetCurrentWeight(Float.parseFloat(currentWeightString));
-            io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, currentAccount.getCurrentEmail());
-
 
             JOptionPane.showMessageDialog(formPanel, heightText + "\n" + weightText);
         });
