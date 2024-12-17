@@ -1,7 +1,7 @@
 # Info
 Trening - App For Muscle Growth
 
-Jonas Outzen -
+Jonas Outzen - cph-jo221@cphbusiness.dk
 
 Jonathan Kudsk -
 
