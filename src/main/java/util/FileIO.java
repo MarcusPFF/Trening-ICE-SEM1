@@ -20,7 +20,7 @@ public class FileIO {
     private Workout wo;
     private Sets sets;
     protected ArrayList<Account> accounts;
-    public JFrameGUI frame;
+    private JFrameGUI frame;
 
     public FileIO() {
         this.accounts = new ArrayList<>();
@@ -118,6 +118,7 @@ public class FileIO {
 
     }
 
+    //GHOST EXERCISES
     public List<Sets> loadLastExercisesData(String lastExercisesPath) {
         List<Sets> accountLastExercisesData = new LinkedList<>();
         File file = new File(lastExercisesPath);
@@ -149,6 +150,7 @@ public class FileIO {
         return accountLastExercisesData;
     }
 
+    //Henter øvelser ned.
     public List<Exercises> loadExerciseData(String exercisesPath) {
         List<Exercises> exerciseData = new ArrayList<>();
         File file = new File(exercisesPath);
@@ -174,22 +176,32 @@ public class FileIO {
         return exerciseData;
     }
 
-    public void saveExerciseData(String folderPath, List<Sets> exercises) {
-        String accountData = (folderPath + acc.getCurrentEmail() + "_exerciseData" + getSplit());
+
+    public void saveExerciseData(String folderPath, List<Sets> exercises, String workoutType) {
+        String accountData = folderPath + "/" + workoutType + "_exerciseData.csv";
         File file = new File(accountData);
         file.getParentFile().mkdirs();
 
+            // If file is empty, write the header
         try (FileWriter writer = new FileWriter(file, true)) {
+
             if (file.length() == 0) {
-                writer.write("exerciseName, setNumber, reps, weight, note");
+                writer.write("exerciseName,setNumber,reps,weight,note\n");
             }
+
+            // Write each set from the passed list
             for (Sets exercise : exercises) {
-                writer.write(sets.getExerciseName() + ", " + sets.getSetNumber() + ", " + sets.getReps() + ", " + sets.getWeight() + ", " + sets.getNote());
+                writer.write(exercise.getExerciseName() + ","
+                        + exercise.getSetNumber() + ","
+                        + exercise.getReps() + ","
+                        + exercise.getWeight() + ","
+                        + exercise.getNote() + "\n");
             }
         } catch (IOException e) {
-            System.out.println("Error saving exercise Data " + e.getMessage());
+            System.out.println("Error saving exercise data: " + e.getMessage());
         }
     }
+
 
     public String getSplit() {
         return split;

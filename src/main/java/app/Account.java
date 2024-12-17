@@ -63,14 +63,12 @@ public class Account {
         return Height;
     }
 
-
     public String getCurrentEmail() {
         return currentEmail;
     }
 
-    public String setCurrentEmail(String currentEmail) {
+    public void setCurrentEmail(String currentEmail) {
         this.currentEmail = currentEmail;
-        return currentEmail;
     }
 
     public float getCurrentWeight() {
