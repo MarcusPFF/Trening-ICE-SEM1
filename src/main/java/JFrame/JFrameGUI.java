@@ -1,6 +1,7 @@
 package JFrame;
 
 import app.Account;
+import app.Exercises;
 import app.Sets;
 import util.FileIO;
 
@@ -22,12 +23,17 @@ public class JFrameGUI extends JFrame {
     private CardLayout cardLayout;
     private Account acc;
     private FileIO io;
-    private List<String> loadEarlierWorkouts;
-    private DefaultListModel<String> listModel;
+    public List<String> loadEarlierWorkouts;
+    public DefaultListModel<String> listModel;
     private JLabel messageLabel;
     private List<Account> accounts;
     private Account currentAccount;
     private String workoutType;
+    private String email;
+    private String password;
+    private List<Exercises> earlierWorkouts;
+    private ArrayList<Sets> ghostTextSets;
+    private String exerciseName;
 
     public JFrameGUI() {
         this.cardLayout = new CardLayout();
@@ -69,6 +75,9 @@ public class JFrameGUI extends JFrame {
         button3.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
         button4.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
 
+        button1.addActionListener(e -> {
+            earlierWorkouts =io.loadEarlierWorkouts("src/data/accountsData/" + email);
+        });
         /* tilføjer knapperne til objektet "panel" */
         panel.add(button1);
         panel.add(button2);
@@ -84,7 +93,7 @@ public class JFrameGUI extends JFrame {
         menu1.setLayout(new BoxLayout(menu1, BoxLayout.Y_AXIS));
         menu1.setBackground(new Color(29, 49, 53));
         menu1.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
+        earlierWorkouts = io.loadEarlierWorkouts("src/data/accountsData/" + email);
         /* Indsæt acc.getEmail() */
         JLabel homePage = new JLabel("Welcome back ", JLabel.CENTER);
         homePage.setFont(new Font("Roboto", Font.BOLD, 24));
@@ -100,13 +109,26 @@ public class JFrameGUI extends JFrame {
         menu1.add(workoutHistory);
 
         /* Brug af JList så man kan rulle på GUI */
-        JList<String> historyList = new JList<>(listModel);
-        historyList.setFont(new Font("Roboto", Font.PLAIN, 14));
-        historyList.setForeground(new Color(60, 60, 60));
-        historyList.setBackground(new Color(240, 240, 240));
-        JScrollPane scrollPane = new JScrollPane(historyList);
+       //JList formatedEarlieworkoutlist = JList;
+        /* JList for workout historik */
+        DefaultListModel<String> workoutListModel = new DefaultListModel<>();
+
+        if (earlierWorkouts != null) {
+            earlierWorkouts = io.loadEarlierWorkouts("src/data/accountsData/" + email);
+            for (Exercises exercise : earlierWorkouts) {
+                workoutListModel.addElement(exercise.getExerciseName() + " - " + exercise.getDate());
+            }
+        }
+        // Tegner workoutlisten
+        JList<String> workoutList = new JList<>(workoutListModel);
+        workoutList.setFont(new Font("Roboto", Font.PLAIN, 14));
+        workoutList.setForeground(new Color(60, 60, 60));
+        workoutList.setBackground(new Color(240, 240, 240));
+
+        JScrollPane scrollPane = new JScrollPane(workoutList);
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         scrollPane.setPreferredSize(new Dimension(400, 150));
+
         menu1.add(scrollPane);
         menu1.add(Box.createRigidArea(new Dimension(0, 20)));
 
@@ -135,18 +157,22 @@ public class JFrameGUI extends JFrame {
         buttonToPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         menu2.add(buttonToPanel);
 
+
         /* Funktion på knapperne */
-        pushButton.addActionListener(e -> {displayWorkoutForm(sidePanel, layout, "Push Workout", 1);
-        workoutType = pushButton.getText();
+        pushButton.addActionListener(e -> {
+            displayWorkoutForm(sidePanel, layout, "Push Workout", 1);
+            workoutType = pushButton.getText();
         });
 
 
-        pullButton.addActionListener(e -> { displayWorkoutForm(sidePanel, layout, "Pull Workout", 2);
-        workoutType = pullButton.getText();
+        pullButton.addActionListener(e -> {
+            displayWorkoutForm(sidePanel, layout, "Pull Workout", 2);
+            workoutType = pullButton.getText();
         });
 
-        legsButton.addActionListener(e -> { displayWorkoutForm(sidePanel, layout, "Legs Workout", 3);
-        workoutType = pushButton.getText();
+        legsButton.addActionListener(e -> {
+            displayWorkoutForm(sidePanel, layout, "Legs Workout", 3);
+            workoutType = legsButton.getText();
         });
 
         /* Order your tren now (MENU 3) */
@@ -170,6 +196,7 @@ public class JFrameGUI extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         int row = 0;
 
+        // Label til højde på bruger
         JLabel heightLabel = new JLabel("Height:");
         gbc.gridx = 0;
         gbc.gridy = row++;
@@ -179,6 +206,7 @@ public class JFrameGUI extends JFrame {
         gbc.gridy = row++;
         formPanel.add(heightField, gbc);
 
+        // Label til vægt på bruger
         JLabel weightLabel = new JLabel("Weight in KG:");
         gbc.gridx = 0;
         gbc.gridy = row++;
@@ -188,21 +216,23 @@ public class JFrameGUI extends JFrame {
         gbc.gridy = row++;
         formPanel.add(weightField, gbc);
 
+        // Gennemgår listen af accounts for at finde den aktuelle bruger.
+        // Når der findes et match, sættes værdierne for højde og vægt i tekstfelterne (heightField og weightField).
+        // Dette sikrer, at den nuværende brugers data vises korrekt i GUI.
         for (Account acc : accounts) {
-            System.out.println(acc.getEmail());
-            System.out.println(currentAccount.getCurrentEmail());
             if (acc.getEmail().equals(currentAccount.getCurrentEmail())) {
-                heightField.setText(String.valueOf((acc.getHeight())));
-                weightField.setText(String.valueOf((acc.getWeight())));
-                System.out.println(weightField);
+                heightField.setText(String.valueOf((currentAccount.getCurrentHeight())));
+                weightField.setText(String.valueOf((currentAccount.getCurrentWeight())));
             }
         }
 
+        // Titel til knap der gemmer data
         JLabel saveLabel = new JLabel("Click Save to save your data:");
         gbc.gridx = 0;
         gbc.gridy = row++;
         formPanel.add(saveLabel, gbc);
 
+        // Selve save-knappen
         JButton saveButton = createModernButton("Save");
         gbc.gridx = 0;
         gbc.gridy = row++;
@@ -213,8 +243,9 @@ public class JFrameGUI extends JFrame {
             float currentWeightString = 0;
             String heightText = "Indtast venligst en højde mellem 100-220cm.";
             String weightText = "Indtast venligst en vægt mellem 40-300kg";
-            io.loadAccountData("src/data/accountsData/Accounts.csv");
+            accounts = io.loadAccountData("src/data/accountsData/Accounts.csv");
 
+            // Ifstatements der sørger for at data giver mening
             if (Float.parseFloat(heightField.getText().trim()) >= 100.0 && Float.parseFloat(heightField.getText().trim()) <= 220.0) {
                 currentHeightString = Float.parseFloat(heightField.getText().trim());
                 heightText = acc.validateSetCurrentHeight(currentHeightString);
@@ -227,7 +258,7 @@ public class JFrameGUI extends JFrame {
             }
             if (Float.parseFloat(weightField.getText().trim()) >= 40 && Float.parseFloat(weightField.getText().trim()) <= 300 && Float.parseFloat(heightField.getText().trim()) >= 100.0 && Float.parseFloat(heightField.getText().trim()) <= 220.0) {
 
-                io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, currentAccount.getCurrentEmail(), currentWeightString, currentHeightString);
+                io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, email, currentWeightString, currentHeightString);
             }
 
 
@@ -278,7 +309,7 @@ public class JFrameGUI extends JFrame {
         setIconImage(image.getImage());
 
         JPanel loginPanel = new JPanel(new GridBagLayout());
-        loginPanel.setBackground(new Color(4, 45, 50));
+        loginPanel.setBackground(new Color(41, 52, 56));
 
         /* Igen bruges GBC til placering af knapper på GUI */
         GridBagConstraints gbc = new GridBagConstraints();
@@ -289,6 +320,7 @@ public class JFrameGUI extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
+
         ImageIcon logo = new ImageIcon("src/doc/docs/treninglogo.png");
         Image resizedImage = logo.getImage().getScaledInstance(400, 300, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(resizedImage);
@@ -318,6 +350,12 @@ public class JFrameGUI extends JFrame {
         JButton createAccountButton = createModernButton("Create Account");
         loginPanel.add(createAccountButton, gbc);
 
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        loginPanel.add(messageLabel, gbc);
+
         mainPanel.add(loginPanel, "Login");
         add(mainPanel);
         cardLayout.show(mainPanel, "Login");
@@ -331,8 +369,8 @@ public class JFrameGUI extends JFrame {
 
             io.loadAccountData("src/data/accountsData/Accounts.csv");
             List<Account> accounts = io.getAccounts();
-            String email = emailField.getText().trim();
-            String password = String.valueOf(passwordField.getPassword());
+            email = emailField.getText().trim();
+            password = String.valueOf(passwordField.getPassword());
             boolean validCredentials = false;
             for (Account acc : accounts) {
                 if (email.equals(acc.getEmail()) && password.equals(acc.getPassword())) {
@@ -351,7 +389,7 @@ public class JFrameGUI extends JFrame {
 
         });
 
-
+        // knap til at lave account
         createAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -362,16 +400,17 @@ public class JFrameGUI extends JFrame {
                     return;
                 }
 
-                // Load account data (ensure that this method actually returns or sets the accounts list)
+                // Loader account-data
                 io.loadAccountData("src/data/accountsData/Accounts.csv");
-                // Retrieve the accounts from io (assuming there's a getter)
-                String email = emailField.getText().trim();
-                String password = String.valueOf(passwordField.getPassword());
 
-                // Validate email and password
+
+                email = emailField.getText().trim();
+                password = String.valueOf(passwordField.getPassword());
+
+                // Validerer email og password
                 if (!email.isEmpty() && !password.isEmpty() && email.contains("@") && email.contains(".") && password.length() >= 8) {
 
-                    // Check if account with this email already exists
+                    // Checker om en account med denne email already eksisterer
                     int accountWithThisEmail = 0;
                     for (Account acc : accounts) {
                         if (email.equals(acc.getEmail())) {
@@ -379,16 +418,19 @@ public class JFrameGUI extends JFrame {
                         }
                     }
                     if (accountWithThisEmail == 0) {
-                        // Create a new account and set its properties
+                        // Laver en ny account
                         accounts.add(new Account(email, password, 0, 0));
                         acc.setEmail(email);
                         acc.setWeight(0);
                         acc.setHeight(0);
+                        currentAccount.setCurrentEmail(email);
+                        currentAccount.setCurrentWeight(0);
+                        currentAccount.setCurrentHeight(0);
                         io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, acc.getEmail(), acc.getWeight(), acc.getHeight());
                         messageLabel.setForeground(Color.BLACK);
                         messageLabel.setText("Account created successfully!");
 
-                        // Create directory if it doesn't exist
+                        // Laver et nyt directory tilaccounten
                         String folderName = email;
                         File folder = new File("src/data/accountsData/" + folderName);
                         if (!folder.exists()) {
@@ -419,68 +461,74 @@ public class JFrameGUI extends JFrame {
 
     }
 
-    public void addWorkoutToHistory(String workout) {
-        loadEarlierWorkouts.add(workout);
-        listModel.addElement(workout);
-    }
-
     private void displayWorkoutForm(JPanel rightPanel, CardLayout layout, String workoutType, int programID) {
 
-        // Create a panel to hold the workout fields
+        // Laver et panel til at holde workout-felter
         JPanel workoutFormPanel = new JPanel();
         workoutFormPanel.setLayout(new BoxLayout(workoutFormPanel, BoxLayout.Y_AXIS));
         workoutFormPanel.setBackground(new Color(255, 255, 255));
         workoutFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Single list to hold all the JTextField objects (for reps, weight, note)
+        // Liste til at holde alle JTextField objekter (for reps, weight, note)
         ArrayList<JTextField> fields = new ArrayList<>();
+        ghostTextSets = io.loadLastExercisesData( "src/data/accountsData/" + email + "/" + workoutType, workoutType);
+        System.out.println(ghostTextSets.size());
+        int x = 3;
+        for (Sets set : ghostTextSets) {
+            exerciseName = set.getExerciseName();
+            if (x == 3) {
+                exerciseName = getExerciseName(exerciseName);
 
-        // Dynamically create fields for each set and exercise
-        for (int exercise = 1; exercise <= 9; exercise++) {
-            JLabel exerciseLabel = new JLabel("Exercise " + exercise + ":");
-            exerciseLabel.setFont(new Font("Roboto", Font.BOLD, 16));
-            workoutFormPanel.add(exerciseLabel);
 
-            for (int set = 1; set <= 3; set++) {
-                JPanel setPanel = new JPanel();
-                setPanel.setLayout(new BoxLayout(setPanel, BoxLayout.X_AXIS));
-                setPanel.setBackground(new Color(255, 255, 255));
-
-                JLabel setLabel = new JLabel("Set " + set + ": ");
-                setLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
-                setPanel.add(setLabel);
-
-                // Reps field
-                JTextField repsField = new JTextField(5);
-                repsField.setMaximumSize(new Dimension(60, 25));
-                fields.add(repsField);
-                setPanel.add(repsField);
-
-                JLabel weightLabel = new JLabel("  Weight: ");
-                weightLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
-                setPanel.add(weightLabel);
-
-                // Weight field
-                JTextField weightField = new JTextField(5);
-                weightField.setMaximumSize(new Dimension(60, 25));
-                fields.add(weightField);
-                setPanel.add(weightField);
-
-                JLabel noteLabel = new JLabel("  Note: ");
-                noteLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
-                setPanel.add(noteLabel);
-
-                // Note field
-                JTextField noteField = new JTextField(10);
-                noteField.setMaximumSize(new Dimension(120, 25));
-                fields.add(noteField);
-                setPanel.add(noteField);
-
-                workoutFormPanel.add(setPanel);
+                JLabel exerciseLabel = new JLabel( exerciseName + ":");
+                exerciseLabel.setFont(new Font("Roboto", Font.BOLD, 16));
+                workoutFormPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+                workoutFormPanel.add(exerciseLabel);
+                x = 0;
             }
+            x++;
 
-            // Add spacing between exercises
-            workoutFormPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+            JPanel setPanel = new JPanel();
+            setPanel.setLayout(new BoxLayout(setPanel, BoxLayout.X_AXIS));
+            setPanel.setBackground(new Color(255, 255, 255));
+
+            //String setNumber = String.valueOf(set.getSetNumber());
+            //System.out.println(setNumber);
+            JLabel setLabel = new JLabel(  "Set " + x + ")   Rep:");
+            setLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
+            setPanel.add(setLabel);
+
+            JTextField repsField = new JTextField(5);
+
+            repsField.setMaximumSize(new Dimension(60, 25));
+            fields.add(repsField);
+            setPanel.add(repsField);
+            repsField.setText(String.valueOf(set.getReps()));
+
+            JLabel weightLabel = new JLabel("  Weight: ");
+            weightLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
+            setPanel.add(weightLabel);
+
+            JTextField weightField = new JTextField(5);
+            weightField.setMaximumSize(new Dimension(60, 25));
+            fields.add(weightField);
+            setPanel.add(weightField);
+            weightField.setText(String.valueOf(set.getWeight()));
+
+            JLabel noteLabel = new JLabel("  Note: ");
+            noteLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
+            setPanel.add(noteLabel);
+
+            // Note felt
+            JTextField noteField = new JTextField(10);
+            noteField.setMaximumSize(new Dimension(120, 25));
+            fields.add(noteField);
+            setPanel.add(noteField);
+            noteField.setText(set.getNote());
+
+
+
+            workoutFormPanel.add(setPanel);
         }
 
         // Add the save button in the bottom right
@@ -489,66 +537,60 @@ public class JFrameGUI extends JFrame {
         JButton saveWorkoutButton = createModernButton("Save");
         buttonPanel.add(saveWorkoutButton);
 
-        // ActionListener to save the workout data
         saveWorkoutButton.addActionListener(e -> {
-            // Create a new list to hold all the sets
+            // Liste til at holde sets
             List<Sets> exercisesData = new ArrayList<>();
 
-            // We know there are 9 exercises, each with 3 sets, and each set has 3 fields (reps, weight, note).
-            // That totals 27 sets * 3 fields = 81 fields. The fields are in order: reps, weight, note for each set.
-            // fieldIndex will keep track of where we are in the fields list.
             int fieldIndex = 0;
 
-            for (int exerciseNum = 1; exerciseNum <= 9; exerciseNum++) {
-                // Use a placeholder exercise name. You may want to replace this with actual exercise names.
-                String exerciseName = "Exercise " + exerciseNum;
+            // Brug eksisterende ghostTextSets til at læse felterne
+            for (Sets set : ghostTextSets) {
+                String exerciseName = set.getExerciseName(); // Få øvelsesnavnet direkte fra objektet
+                int setNumber = set.getSetNumber();
 
-                for (int setNumber = 1; setNumber <= 3; setNumber++) {
-                    String repsStr = fields.get(fieldIndex++).getText().trim();
-                    String weightStr = fields.get(fieldIndex++).getText().trim();
-                    String note = fields.get(fieldIndex++).getText().trim();
+                // Læs tekstfelter fra den gemte rækkefølge i fields-listen
+                String repsStr = fields.get(fieldIndex++).getText().trim();
+                String weightStr = fields.get(fieldIndex++).getText().trim();
+                String note = fields.get(fieldIndex++).getText().trim();
 
-                    int reps = 0;
-                    float weight = 0.0f;
+                int reps = 0;
+                float weight = 0.0f;
 
-                    try {
-                        reps = Integer.parseInt(repsStr);
-                    } catch (NumberFormatException exInt) {
-                        // handle invalid reps input if necessary
-                    }
-
-                    try {
-                        weight = Float.parseFloat(weightStr);
-                    } catch (NumberFormatException exFloat) {
-                        // handle invalid weight input if necessary
-                    }
-
-                    // Create a new Sets object with the collected data
-                    Sets set = new Sets(exerciseName, setNumber, reps, weight, note);
-                    exercisesData.add(set);
-                    messageLabel.setText("Workout saved!");
-                    displayMenuGUI();
-                    cardLayout.show(mainPanel, "Menu");cardLayout.show(mainPanel, "menu");
-
+                try {
+                    reps = Integer.parseInt(repsStr);
+                } catch (NumberFormatException exInt) {
+                    System.out.println("Fejl ved parsing af reps: " + repsStr);
                 }
+
+                try {
+                    weight = Float.parseFloat(weightStr);
+                } catch (NumberFormatException exFloat) {
+                    System.out.println("Fejl ved parsing af vægt: " + weightStr);
+                }
+
+                // Opret nyt Sets-objekt med data
+                Sets updatedSet = new Sets(exerciseName, setNumber, reps, weight, note);
+                exercisesData.add(updatedSet);
+                messageLabel.setText("Workout saved!");
+                displayMenuGUI();
+                cardLayout.show(mainPanel, "Menu");
+                cardLayout.show(mainPanel, "menu");
             }
 
-            // Now call your save method with the exercisesData list
-            io.saveExerciseData("src/data/accountsData/" + currentAccount.getCurrentEmail(), exercisesData, workoutType);
+            String date = String.valueOf(LocalDate.now());
+            earlierWorkouts.add(new Exercises(workoutType, date));
+            io.saveExerciseData("src/data/accountsData/" + email + "/", exercisesData, workoutType);
+            io.saveEarlierWorkouts( "src/data/accountsData/" + email, earlierWorkouts);
 
-            // Add to workout history
-            addWorkoutToHistory(workoutType + " logged on " + LocalDate.now());
 
         });
 
         workoutFormPanel.add(buttonPanel);
 
-        // Scroll pane to handle large content
         JScrollPane scrollPane = new JScrollPane(workoutFormPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        // Add workout form to the right panel and show it
         rightPanel.add(scrollPane, workoutType);
         layout.show(rightPanel, workoutType);
     }
@@ -599,9 +641,103 @@ public class JFrameGUI extends JFrame {
         this.currentAccount = currentAccount;
     }
 
+    public Account getCurrentAccount() {
+        return currentAccount;
+    }
+
     @Override
     public String toString() {
         return "JFrameGUI{" + "acc=" + acc + '}';
+    }
+
+    public String getExerciseName(String exerciseName){
+        switch (exerciseName) {
+            case "Exercise 1":
+                exerciseName = "Bench Press";
+                break;
+            case "Exercise 2":
+                exerciseName = "Overhead Press";
+                break;
+            case "Exercise 3":
+                exerciseName = "Incline Dumbbell Press";
+                break;
+            case "Exercise 4":
+                exerciseName = "Push-Ups";
+                break;
+            case "Exercise 5":
+                exerciseName = "Dips";
+                break;
+            case "Exercise 6":
+                exerciseName = "Dumbbell Lateral Raise";
+                break;
+            case "Exercise 7":
+                exerciseName = "Cable Chest Fly";
+                break;
+            case "Exercise 8":
+                exerciseName = "Tricep Pushdown";
+                break;
+            case "Exercise 9":
+                exerciseName = "Dumbbell Front Raise";
+                break;
+            case "Exercise 10":
+                exerciseName = "Pull-Ups";
+                break;
+            case "Exercise 11":
+                exerciseName = "Barbell Row";
+                break;
+            case "Exercise 12":
+                exerciseName = "Deadlift";
+                break;
+            case "Exercise 13":
+                exerciseName = "Lat Pulldown";
+                break;
+            case "Exercise 14":
+                exerciseName = "Face Pulls";
+                break;
+            case "Exercise 15":
+                exerciseName = "Bicep Curl";
+                break;
+            case "Exercise 16":
+                exerciseName = "Dumbbell Rear Delt Fly";
+                break;
+            case "Exercise 17":
+                exerciseName = "T-Bar Row";
+                break;
+            case "Exercise 18":
+                exerciseName = "Cable Row";
+                break;
+            case "Exercise 19":
+                exerciseName = "Squats";
+                break;
+            case "Exercise 20":
+                exerciseName = "Leg Press";
+                break;
+            case "Exercise 21":
+                exerciseName = "Lunges";
+                break;
+            case "Exercise 22":
+                exerciseName = "Romanian Deadlift";
+                break;
+            case "Exercise 23":
+                exerciseName = "Leg Curls";
+                break;
+            case "Exercise 24":
+                exerciseName = "Leg Extensions";
+                break;
+            case "Exercise 25":
+                exerciseName = "Calf Raises";
+                break;
+            case "Exercise 26":
+                exerciseName = "Step-Ups";
+                break;
+            case "Exercise 27":
+                exerciseName = "Bulgarian Split Squats";
+                break;
+            default:
+                exerciseName = "Unknown Exercise";
+                break;
+        }
+        return exerciseName;
     }
 
 }

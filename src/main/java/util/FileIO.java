@@ -4,8 +4,10 @@ import JFrame.JFrameGUI;
 import app.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,30 +22,26 @@ public class FileIO {
     private Workout wo;
     private Sets sets;
     protected ArrayList<Account> accounts;
-    private JFrameGUI frame;
+    public JFrameGUI frame;
+    protected List<Exercises> accountEarlierWorkouts;
+    protected ArrayList<Sets> accountLastExerciseData;
 
     public FileIO() {
         this.accounts = new ArrayList<>();
+        this.accountLastExerciseData = new ArrayList<>();
         this.menu = new Menu();
         this.acc = new Account();
         this.ex = new Exercises();
         this.wo = new Workout();
         this.sets = new Sets();
-        String folderPath = "src/data/accountsData/" + acc.getCurrentEmail() + "/";
-        String accountPathFile = "src/data/accountsData/Accounts.csv";
-        String exercisesPath = "src/data/Exercises.txt";
-        String earlierExercisesPath = folderPath + "earlierExercises.txt";
-        String lastExercisePath = folderPath + acc.getCurrentEmail() + "_exerciseData" + getSplit();
 
     }
 
-/*
- Loads user data from a CSV file at the specified file path.
- If the file doesn't exist, it prints an error message and returns an empty list.
- Reads each line of the file, splits it by commas, and creates User objects with the data.
-*/
-
-
+    /*
+     Loader brugerdata ned fra en CSV fil ved den specificerede fil-path.
+     hvis der ikke er nogen fil ud fra file-path kommer der en errormessage.
+     Læser alle linjer, splitter med kommaer, og laver User-objects med dataen.
+    */
     public List<Account> loadAccountData(String accountPath) {
         accounts.clear();
         File file = new File(accountPath);
@@ -84,10 +82,10 @@ public class FileIO {
         try (FileWriter writer = new FileWriter(file)) {
             writer.write("Email,Password,Weight,Height\n");
             for (Account account : accounts) {
-                if ( account.getEmail().equals(currentEmail) ) {
+                if (account.getEmail().equals(currentEmail)) {
                     writer.write(account.getEmail() + "," + account.getPassword() + "," + weight + "," + height + "\n");
                 } else {
-                    writer.write(account.getEmail() + "," + account.getPassword() + "," + acc.getWeight() + "," + acc.getHeight() + "\n");
+                    writer.write(account.getEmail() + "," + account.getPassword() + "," + account.getWeight() + "," + account.getHeight() + "\n");
                 }
             }
         } catch (IOException e) {
@@ -95,62 +93,115 @@ public class FileIO {
         }
     }
 
-    public List<Exercises> loadEarlierExercises(String earlierExercisesPath) {
-        List<Exercises> accountEarlierExerciseData = new ArrayList<>();
-        File file = new File(earlierExercisesPath);
+    //Benyttes til at displaye tidligere træninger på vores homePage.
+    public List<Exercises> loadEarlierWorkouts(String folderPath) {
+        List<Exercises> accountEarlierWorkouts = new ArrayList<>();
+        String accountData = folderPath + "/earlierWorkouts.csv";
+        File file = new File(accountData);
+
         if (!file.exists()) {
-            System.out.println("Brugerdatafil ikke fundet: " + earlierExercisesPath);
-            return accountEarlierExerciseData;
+            System.out.println("Brugerdatafil ikke fundet: " + accountData);
+            return accountEarlierWorkouts;
         }
+
         try (Scanner scanner = new Scanner(file)) {
             scanner.nextLine();
             while (scanner.hasNextLine()) {
                 String[] data = scanner.nextLine().split(",");
                 if (data.length == 2) {
-                    String splitName = data[0].trim();
+                    String workoutName = data[0].trim();
                     String dateTime = data[1].trim();
+                    accountEarlierWorkouts.add(new Exercises(workoutName, dateTime));
                 }
+
             }
+            return accountEarlierWorkouts;
         } catch (IOException e) {
             System.out.println("Error loading exercise Data " + e.getMessage());
         }
-        return accountEarlierExerciseData;
-
+        return accountEarlierWorkouts;
     }
 
-    //GHOST EXERCISES
-    public List<Sets> loadLastExercisesData(String lastExercisesPath) {
-        List<Sets> accountLastExercisesData = new LinkedList<>();
-        File file = new File(lastExercisesPath);
+    // Loader tidligere træninger så de kan fremkaldes på de forskellige Jfields når ny træning påbegyndes, for at man kan se tidligere reps, vægt og noter.
+    public ArrayList<Sets> loadLastExercisesData(String lastExercisesPath, String workoutType) {
+        String accountData = lastExercisesPath +  "_exerciseData.csv";
+        File file = new File(accountData);
+        System.out.println(file);
         if (!file.exists()) {
-            System.out.println("Brugerdatafil ikke fundet: " + lastExercisesPath);
-            return accountLastExercisesData;
-        }
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine().trim();
-                String[] data = line.split(",");
-                if (data.length == 5) {
-                    String exericseName = data[0].trim();
-                    int setNumber = Integer.parseInt(data[1].trim());
-                    int reps = Integer.parseInt(data[2].trim());
-                    float weight = Float.parseFloat(data[3].trim());
-                    String note = data[4].trim();
+            System.out.println("Brugerdatafil ikke fundet: " + lastExercisesPath);;
+            file.getParentFile().mkdirs();
+            try (FileWriter writer = new FileWriter(accountData, true)) {
 
-                    accountLastExercisesData.add(new Sets(exericseName, setNumber, reps, weight, note));
+                if (file.length() == 0) {
+                    writer.write("exerciseName,setNumber,reps,weight,note\n");
+                    int x = 0;
+                    switch (workoutType){
+                        case "Push Workout":
+                            x = 1;
+                            break;
+                        case "Pull Workout":
+                            x = 10;
+                            break;
+                        case "Legs Workout":
+                            x = 19;
+                            break;
+                    }
+                    for (int antalGennemgange = 0; antalGennemgange < 9; antalGennemgange++) {
+                        writer.write("Exercise " + x+ "," + 0 + "," + 0 + "," + 0 + "," + "Ingen Note" + "\n");
+                        writer.write("Exercise " + x+ "," + 0 + "," + 0 + "," + 0 + "," + "Ingen Note" + "\n");
+                        writer.write("Exercise " + x+ "," + 0 + "," + 0 + "," + 0 + "," + "Ingen Note" + "\n");
+                        x++;
+                    }
                 }
 
-                if (accountLastExercisesData.size() > 27) {
-                    accountLastExercisesData.removeFirst();
+            } catch (IOException e) {
+                System.out.println("Error saving exercise data: " + e.getMessage());
+            }
+
+            loadLastExercisesData(lastExercisesPath, workoutType);
+        }
+
+        try (Scanner scanner = new Scanner(file)) {
+            if (scanner.hasNextLine()) {
+                scanner.nextLine(); // Skip header
+
+
+                while (scanner.hasNextLine()) {
+                    String[] data = scanner.nextLine().trim().split(",");
+                    if (data.length == 5) {
+                        String exerciseName = data[0].trim();
+                        int setNumber = Integer.parseInt(data[1].trim());
+                        int reps = Integer.parseInt(data[2].trim());
+                        float weight = Float.parseFloat(data[3].trim());
+                        String note = data[4].trim();
+
+                        accountLastExerciseData.add(new Sets(exerciseName, setNumber, reps, weight, note));
+                    } else if (data.length == 4) {
+                        String exerciseName = data[0].trim();
+                        int setNumber = Integer.parseInt(data[1].trim());
+                        int reps = Integer.parseInt(data[2].trim());
+                        float weight = Float.parseFloat(data[3].trim());
+
+                        accountLastExerciseData.add(new Sets(exerciseName, setNumber, reps, weight, "ingen note"));
+                    }
+
+
+                    if (accountLastExerciseData.size() > 27) {
+                        accountLastExerciseData.removeFirst();
+                    }
                 }
             }
-        } catch (IOException e) {
+
+
+
+        } catch (FileNotFoundException e) {
             System.out.println("Fejl ved skrivning af brugerdata: " + e.getMessage());
         }
-        return accountLastExercisesData;
+        System.out.println(accountLastExerciseData.size());
+        return accountLastExerciseData;
     }
 
-    //Henter øvelser ned.
+    //Henter øvelser ned til de 3 forskellige programmer/splits som vi har lavet.
     public List<Exercises> loadExerciseData(String exercisesPath) {
         List<Exercises> exerciseData = new ArrayList<>();
         File file = new File(exercisesPath);
@@ -176,31 +227,52 @@ public class FileIO {
         return exerciseData;
     }
 
-
+    //Gemmer træningsdata ned i en cvs fil.
     public void saveExerciseData(String folderPath, List<Sets> exercises, String workoutType) {
         String accountData = folderPath + "/" + workoutType + "_exerciseData.csv";
         File file = new File(accountData);
         file.getParentFile().mkdirs();
 
-            // If file is empty, write the header
-        try (FileWriter writer = new FileWriter(file, true)) {
+        try (FileWriter writer = new FileWriter(accountData, true)) {
 
             if (file.length() == 0) {
                 writer.write("exerciseName,setNumber,reps,weight,note\n");
             }
 
-            // Write each set from the passed list
             for (Sets exercise : exercises) {
                 writer.write(exercise.getExerciseName() + ","
                         + exercise.getSetNumber() + ","
                         + exercise.getReps() + ","
-                        + exercise.getWeight() + ","
+                        + exercise.getWeight()  + ","
                         + exercise.getNote() + "\n");
             }
+
+        } catch (IOException e) {
+            System.out.println("Error saving exercise data: " + e.getMessage());
+        }
+
+
+    }
+    //Gemmer tidligere workouts
+    public void saveEarlierWorkouts(String folderPath, List<Exercises> accountEarlierWorkouts) {
+        String accountData = folderPath + "/earlierWorkouts.csv";
+        File file = new File(accountData);
+        file.getParentFile().mkdirs();
+
+        try (FileWriter writer = new FileWriter(accountData)) {
+            if (file.length() == 0) {
+                writer.write("workoutName, date\n");
+            }
+            for (Exercises exercise : accountEarlierWorkouts) {
+                writer.write(exercise.getExerciseName() + ","
+                        + exercise.getDate() + "\n");
+            }
+
         } catch (IOException e) {
             System.out.println("Error saving exercise data: " + e.getMessage());
         }
     }
+
 
 
     public String getSplit() {

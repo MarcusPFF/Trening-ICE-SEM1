@@ -67,6 +67,10 @@ public class Exercises {
     public List<Exercises> getTrainingProgram() {
         return TrainingProgram;
     }
+
+    public String getDate() {
+        return date;
+    }
 }
 
 

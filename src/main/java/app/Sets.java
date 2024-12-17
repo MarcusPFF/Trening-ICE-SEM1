@@ -37,7 +37,8 @@ public class Sets {
         this.setNumber = setNumber;
     }
 
-    public int getReps() {
+
+        public int getReps() {
         return reps;
     }
 
@@ -61,3 +62,4 @@ public class Sets {
         this.note = note;
     }
 }
+
