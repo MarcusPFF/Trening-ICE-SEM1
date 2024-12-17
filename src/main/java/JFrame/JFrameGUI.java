@@ -1,6 +1,7 @@
 package JFrame;
 
 import app.Account;
+import app.Sets;
 import util.FileIO;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class JFrameGUI extends JFrame {
     private JLabel messageLabel;
     private List<Account> accounts;
     private Account currentAccount;
+    private String workoutType;
 
     public JFrameGUI() {
         this.cardLayout = new CardLayout();
@@ -130,9 +133,18 @@ public class JFrameGUI extends JFrame {
         menu2.add(buttonToPanel);
 
         /* Funktion på knapperne */
-        pushButton.addActionListener(e -> displayWorkoutForm(sidePanel, layout, "Push Workout"));
-        pullButton.addActionListener(e -> displayWorkoutForm(sidePanel, layout, "Pull Workout"));
-        legsButton.addActionListener(e -> displayWorkoutForm(sidePanel, layout, "Legs Workout"));
+        pushButton.addActionListener(e -> {displayWorkoutForm(sidePanel, layout, "Push Workout", 1);
+        workoutType = pushButton.getText();
+        });
+
+
+        pullButton.addActionListener(e -> { displayWorkoutForm(sidePanel, layout, "Pull Workout", 2);
+        workoutType = pullButton.getText();
+        });
+
+        legsButton.addActionListener(e -> { displayWorkoutForm(sidePanel, layout, "Legs Workout", 3);
+        workoutType = pushButton.getText();
+        });
 
         /* Order your tren now (MENU 3) */
         JPanel menu3 = createModernPanel("Order your Tren now!");
@@ -188,10 +200,10 @@ public class JFrameGUI extends JFrame {
             String currentHeightString = heightField.getText().trim();
             String currentWeightString = weightField.getText().trim();
 
-            String heightText = acc.validateSetCurrentHeight(currentHeightString);
-            String weightText = acc.validateSetCurrentWeight(currentWeightString);
-            currentAccount.validateSetCurrentHeight(currentHeightString);
-            currentAccount.validateSetCurrentWeight(currentWeightString);
+            String heightText = acc.validateSetCurrentHeight(Float.parseFloat(currentHeightString));
+            String weightText = acc.validateSetCurrentWeight(Float.parseFloat(currentWeightString));
+            currentAccount.validateSetCurrentHeight(Float.parseFloat(currentHeightString));
+            currentAccount.validateSetCurrentWeight(Float.parseFloat(currentWeightString));
             io.saveAccountData("src/data/accountsData/Accounts.csv", accounts, currentAccount.getCurrentEmail());
 
             JOptionPane.showMessageDialog(formPanel, heightText + "\n" + weightText);
@@ -311,6 +323,7 @@ public class JFrameGUI extends JFrame {
                 messageLabel.setForeground(Color.RED);
                 messageLabel.setText("Invalid email or password");
             }
+
         });
 
 
@@ -388,31 +401,132 @@ public class JFrameGUI extends JFrame {
         listModel.addElement(workout);
     }
 
-    private void displayWorkoutForm(JPanel rightPanel, CardLayout layout, String workoutType) {
+    private void displayWorkoutForm(JPanel rightPanel, CardLayout layout, String workoutType, int programID) {
+
+        // Create a panel to hold the workout fields
         JPanel workoutFormPanel = new JPanel();
         workoutFormPanel.setLayout(new BoxLayout(workoutFormPanel, BoxLayout.Y_AXIS));
         workoutFormPanel.setBackground(new Color(255, 255, 255));
         workoutFormPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        workoutFormPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        /* Felter man skriver sine gentagelser i. TILFØJ SET 2 og 3 */
-        JLabel set1 = new JLabel("Set 1" + ":");
-        set1.setFont(new Font("Roboto", Font.PLAIN, 16));
-        set1.setAlignmentX(Component.CENTER_ALIGNMENT);
-        workoutFormPanel.add(set1);
-        JTextField textField = new JTextField(20);
-        textField.setMaximumSize(new Dimension(300, 30));
-        textField.setAlignmentX(Component.CENTER_ALIGNMENT);
-        workoutFormPanel.add(textField);
-        workoutFormPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        // Single list to hold all the JTextField objects (for reps, weight, note)
+        ArrayList<JTextField> fields = new ArrayList<>();
 
-        /* Tilbage knap */
-        JButton backButton = createModernButton("Back");
-        backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        backButton.addActionListener(e -> layout.show(rightPanel, "Workout"));
-        workoutFormPanel.add(backButton);
+        // Dynamically create fields for each set and exercise
+        for (int exercise = 1; exercise <= 9; exercise++) {
+            JLabel exerciseLabel = new JLabel("Exercise " + exercise + ":");
+            exerciseLabel.setFont(new Font("Roboto", Font.BOLD, 16));
+            workoutFormPanel.add(exerciseLabel);
 
-        rightPanel.add(workoutFormPanel, workoutType);
+            for (int set = 1; set <= 3; set++) {
+                JPanel setPanel = new JPanel();
+                setPanel.setLayout(new BoxLayout(setPanel, BoxLayout.X_AXIS));
+                setPanel.setBackground(new Color(255, 255, 255));
+
+                JLabel setLabel = new JLabel("Set " + set + ": ");
+                setLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
+                setPanel.add(setLabel);
+
+                // Reps field
+                JTextField repsField = new JTextField(5);
+                repsField.setMaximumSize(new Dimension(60, 25));
+                fields.add(repsField);
+                setPanel.add(repsField);
+
+                JLabel weightLabel = new JLabel("  Weight: ");
+                weightLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
+                setPanel.add(weightLabel);
+
+                // Weight field
+                JTextField weightField = new JTextField(5);
+                weightField.setMaximumSize(new Dimension(60, 25));
+                fields.add(weightField);
+                setPanel.add(weightField);
+
+                JLabel noteLabel = new JLabel("  Note: ");
+                noteLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
+                setPanel.add(noteLabel);
+
+                // Note field
+                JTextField noteField = new JTextField(10);
+                noteField.setMaximumSize(new Dimension(120, 25));
+                fields.add(noteField);
+                setPanel.add(noteField);
+
+                workoutFormPanel.add(setPanel);
+            }
+
+            // Add spacing between exercises
+            workoutFormPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        }
+
+        // Add the save button in the bottom right
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setBackground(new Color(255, 255, 255));
+        JButton saveWorkoutButton = createModernButton("Save");
+        buttonPanel.add(saveWorkoutButton);
+
+        // ActionListener to save the workout data
+        saveWorkoutButton.addActionListener(e -> {
+            // Create a new list to hold all the sets
+            List<Sets> exercisesData = new ArrayList<>();
+
+            // We know there are 9 exercises, each with 3 sets, and each set has 3 fields (reps, weight, note).
+            // That totals 27 sets * 3 fields = 81 fields. The fields are in order: reps, weight, note for each set.
+            // fieldIndex will keep track of where we are in the fields list.
+            int fieldIndex = 0;
+
+            for (int exerciseNum = 1; exerciseNum <= 9; exerciseNum++) {
+                // Use a placeholder exercise name. You may want to replace this with actual exercise names.
+                String exerciseName = "Exercise " + exerciseNum;
+
+                for (int setNumber = 1; setNumber <= 3; setNumber++) {
+                    String repsStr = fields.get(fieldIndex++).getText().trim();
+                    String weightStr = fields.get(fieldIndex++).getText().trim();
+                    String note = fields.get(fieldIndex++).getText().trim();
+
+                    int reps = 0;
+                    float weight = 0.0f;
+
+                    try {
+                        reps = Integer.parseInt(repsStr);
+                    } catch (NumberFormatException exInt) {
+                        // handle invalid reps input if necessary
+                    }
+
+                    try {
+                        weight = Float.parseFloat(weightStr);
+                    } catch (NumberFormatException exFloat) {
+                        // handle invalid weight input if necessary
+                    }
+
+                    // Create a new Sets object with the collected data
+                    Sets set = new Sets(exerciseName, setNumber, reps, weight, note);
+                    exercisesData.add(set);
+                    messageLabel.setText("Workout saved!");
+                    displayMenuGUI();
+                    cardLayout.show(mainPanel, "Menu");cardLayout.show(mainPanel, "menu");
+
+                }
+            }
+
+            // Now call your save method with the exercisesData list
+            io.saveExerciseData("src/data/accountsData/" + currentAccount.getCurrentEmail(), exercisesData, workoutType);
+
+            // Add to workout history
+            addWorkoutToHistory(workoutType + " logged on " + LocalDate.now());
+
+        });
+
+        workoutFormPanel.add(buttonPanel);
+
+        // Scroll pane to handle large content
+        JScrollPane scrollPane = new JScrollPane(workoutFormPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        // Add workout form to the right panel and show it
+        rightPanel.add(scrollPane, workoutType);
         layout.show(rightPanel, workoutType);
     }
 
@@ -461,4 +575,5 @@ public class JFrameGUI extends JFrame {
     public void setCurrentAccount(Account currentAccount) {
         this.currentAccount = currentAccount;
     }
+
 }
