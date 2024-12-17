@@ -77,17 +77,17 @@ public class FileIO {
      Writes the user details (username, password, and validate (which is in this case admin status) for each user in the list to the file.
     */
 
-    public void saveAccountData(String filePath, List<Account> accounts, String currentEmail) {
+    public void saveAccountData(String filePath, List<Account> accounts, String currentEmail, float weight, float height) {
         File file = new File(filePath);
         file.getParentFile().mkdirs();
 
         try (FileWriter writer = new FileWriter(file)) {
             writer.write("Email,Password,Weight,Height\n");
             for (Account account : accounts) {
-                if (account.getEmail() == currentEmail) {
-                    writer.write(account.getEmail() + "," + account.getPassword() + "," + acc.getCurrentWeight() + "," + acc.getCurrentHeight() + "\n");
+                if ( account.getEmail().equals(currentEmail) ) {
+                    writer.write(account.getEmail() + "," + account.getPassword() + "," + weight + "," + height + "\n");
                 } else {
-                    writer.write(account.getEmail() + "," + account.getPassword() + "," + account.getWeight() + "," + account.getHeight() + "\n");
+                    writer.write(account.getEmail() + "," + account.getPassword() + "," + acc.getWeight() + "," + acc.getHeight() + "\n");
                 }
             }
         } catch (IOException e) {
@@ -182,8 +182,9 @@ public class FileIO {
         File file = new File(accountData);
         file.getParentFile().mkdirs();
 
-        try (FileWriter writer = new FileWriter(accountData, true)) {
             // If file is empty, write the header
+        try (FileWriter writer = new FileWriter(file, true)) {
+
             if (file.length() == 0) {
                 writer.write("exerciseName,setNumber,reps,weight,note\n");
             }

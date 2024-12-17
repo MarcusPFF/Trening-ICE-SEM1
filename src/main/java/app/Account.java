@@ -55,12 +55,12 @@ public class Account {
 
 
     public float getWeight() {
-        return weight;
+        return Weight;
     }
 
 
     public float getHeight() {
-        return height;
+        return Height;
     }
 
     public String getCurrentEmail() {
