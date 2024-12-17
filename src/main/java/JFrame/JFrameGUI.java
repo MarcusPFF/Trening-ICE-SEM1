@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JFrameGUI extends JFrame {
-    protected String currentWeightString;
     private JPanel mainPanel;
     private CardLayout cardLayout;
     private Account acc;
@@ -492,8 +491,6 @@ public class JFrameGUI extends JFrame {
             setPanel.setLayout(new BoxLayout(setPanel, BoxLayout.X_AXIS));
             setPanel.setBackground(new Color(255, 255, 255));
 
-            //String setNumber = String.valueOf(set.getSetNumber());
-            //System.out.println(setNumber);
             JLabel setLabel = new JLabel(  "Set " + x + ")   Rep:");
             setLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
             setPanel.add(setLabel);
@@ -631,18 +628,6 @@ public class JFrameGUI extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         return panel;
-    }
-
-    public String getCurrentAccountWeight() {
-        return currentWeightString;
-    }
-
-    public void setCurrentAccount(Account currentAccount) {
-        this.currentAccount = currentAccount;
-    }
-
-    public Account getCurrentAccount() {
-        return currentAccount;
     }
 
     @Override

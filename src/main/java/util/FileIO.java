@@ -1,25 +1,23 @@
 package util;
 
 import JFrame.JFrameGUI;
-import app.*;
+import app.Account;
+import app.Exercises;
+import app.Sets;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 
 public class FileIO {
     protected String split;
-    private Menu menu;
     private Account acc;
     private Exercises ex;
-    private Workout wo;
     private Sets sets;
     protected ArrayList<Account> accounts;
     public JFrameGUI frame;
@@ -29,10 +27,8 @@ public class FileIO {
     public FileIO() {
         this.accounts = new ArrayList<>();
         this.accountLastExerciseData = new ArrayList<>();
-        this.menu = new Menu();
         this.acc = new Account();
         this.ex = new Exercises();
-        this.wo = new Workout();
         this.sets = new Sets();
 
     }
@@ -69,11 +65,7 @@ public class FileIO {
         }
         return accounts;
     }
-    /*
-     Saves user data to a CSV file at the specified file path.
-     If the parent directories of the file don't exist, they are created.
-     Writes the user details (username, password, and validate (which is in this case admin status) for each user in the list to the file.
-    */
+
 
     public void saveAccountData(String filePath, List<Account> accounts, String currentEmail, float weight, float height) {
         File file = new File(filePath);
@@ -124,18 +116,19 @@ public class FileIO {
 
     // Loader tidligere træninger så de kan fremkaldes på de forskellige Jfields når ny træning påbegyndes, for at man kan se tidligere reps, vægt og noter.
     public ArrayList<Sets> loadLastExercisesData(String lastExercisesPath, String workoutType) {
-        String accountData = lastExercisesPath +  "_exerciseData.csv";
+        String accountData = lastExercisesPath + "_exerciseData.csv";
         File file = new File(accountData);
         System.out.println(file);
         if (!file.exists()) {
-            System.out.println("Brugerdatafil ikke fundet: " + lastExercisesPath);;
+            System.out.println("Brugerdatafil ikke fundet: " + lastExercisesPath);
+            ;
             file.getParentFile().mkdirs();
             try (FileWriter writer = new FileWriter(accountData, true)) {
 
                 if (file.length() == 0) {
                     writer.write("exerciseName,setNumber,reps,weight,note\n");
                     int x = 0;
-                    switch (workoutType){
+                    switch (workoutType) {
                         case "Push Workout":
                             x = 1;
                             break;
@@ -147,9 +140,9 @@ public class FileIO {
                             break;
                     }
                     for (int antalGennemgange = 0; antalGennemgange < 9; antalGennemgange++) {
-                        writer.write("Exercise " + x+ "," + 0 + "," + 0 + "," + 0 + "," + "Ingen Note" + "\n");
-                        writer.write("Exercise " + x+ "," + 0 + "," + 0 + "," + 0 + "," + "Ingen Note" + "\n");
-                        writer.write("Exercise " + x+ "," + 0 + "," + 0 + "," + 0 + "," + "Ingen Note" + "\n");
+                        writer.write("Exercise " + x + "," + 0 + "," + 0 + "," + 0 + "," + "Ingen Note" + "\n");
+                        writer.write("Exercise " + x + "," + 0 + "," + 0 + "," + 0 + "," + "Ingen Note" + "\n");
+                        writer.write("Exercise " + x + "," + 0 + "," + 0 + "," + 0 + "," + "Ingen Note" + "\n");
                         x++;
                     }
                 }
@@ -193,38 +186,11 @@ public class FileIO {
             }
 
 
-
         } catch (FileNotFoundException e) {
             System.out.println("Fejl ved skrivning af brugerdata: " + e.getMessage());
         }
         System.out.println(accountLastExerciseData.size());
         return accountLastExerciseData;
-    }
-
-    //Henter øvelser ned til de 3 forskellige programmer/splits som vi har lavet.
-    public List<Exercises> loadExerciseData(String exercisesPath) {
-        List<Exercises> exerciseData = new ArrayList<>();
-        File file = new File(exercisesPath);
-
-        if (!file.exists()) {
-            System.out.println("Exercise data fil ikke fundet: " + exerciseData);
-            return exerciseData;
-        }
-
-        try (Scanner scanner = new Scanner(file)) {
-            scanner.nextLine();
-            while (scanner.hasNextLine()) {
-                String[] data = scanner.nextLine().split(",");
-                if (data.length == 3) {
-                    String Nr = data[0].trim();
-                    String ExerciseName = data[1].trim();
-                    String Id = data[2].trim();
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error loading exercise Data " + e.getMessage());
-        }
-        return exerciseData;
     }
 
     //Gemmer træningsdata ned i en cvs fil.
@@ -243,7 +209,7 @@ public class FileIO {
                 writer.write(exercise.getExerciseName() + ","
                         + exercise.getSetNumber() + ","
                         + exercise.getReps() + ","
-                        + exercise.getWeight()  + ","
+                        + exercise.getWeight() + ","
                         + exercise.getNote() + "\n");
             }
 
@@ -273,21 +239,8 @@ public class FileIO {
         }
     }
 
-
-
-    public String getSplit() {
-        return split;
-    }
-
-    public void setSplit(String split) {
-        this.split = split;
-    }
-
     public ArrayList<Account> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(ArrayList<Account> accounts) {
-        this.accounts = accounts;
-    }
 }
