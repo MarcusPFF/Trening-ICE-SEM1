@@ -55,12 +55,12 @@ public class Account {
 
 
     public float getWeight() {
-        return weight;
+        return Weight;
     }
 
 
     public float getHeight() {
-        return height;
+        return Height;
     }
 
 
@@ -89,21 +89,26 @@ public class Account {
         this.currentHeight = currentHeight;
     }
 
+    public void setWeight(float weight) {
+        Weight = weight;
+    }
+
+    public void setHeight(float height) {
+        Height = height;
+    }
 
     // Efter vægt er skrevet ind kigger denne metode igennem om svaret er indefor normalvægt og om det er et tal.
-    public String validateSetCurrentWeight(String currentWeightString) {
+    public String validateSetCurrentWeight(float currentWeightString) {
         try {
             //currentWeightString = weightField.getText();
-            float currentWeight = Float.parseFloat(currentWeightString);
+            float currentWeight = currentWeightString;
 
             if (currentWeight >= 40.0 && currentWeight <= 300.0) {
                 setCurrentWeight(currentWeight);
                 weightText = "Vægt opdateret til: " + currentWeight;
                 return weightText;
-            } else {
-                weightText = "Indtast venligst en vægt mellem 40-300kg";
-                return weightText;
             }
+            return null;
         } catch (NumberFormatException e) {
             // Håndter fejl, hvis input ikke kan konverteres til et tal
             weightText = "Der skete en uventet fejl - prøv igen senere.";
@@ -112,19 +117,16 @@ public class Account {
     }
 
     // Efter højde er skrevet ind kigger denne metode igennem om svaret er indefor normalhøjde og om det er et tal.
-    public String validateSetCurrentHeight(String currentHeightString) {
+    public String validateSetCurrentHeight(float currentHeightString) {
         try {
             //currentHeightString = heightField.getText();
-            float currentHeight = Float.parseFloat(currentHeightString);
-
+            float currentHeight= currentHeightString;
             if (currentHeight >= 100.0 && currentHeight <= 220.0) {
                 setCurrentHeight(currentHeight);
                 heightText = "Højde opdateret til: " + currentHeight;
                 return heightText;
-            } else {
-               heightText = "Indtast venligst en højde mellem 100-220cm.";
-               return heightText;
             }
+            return null;
         } catch (NumberFormatException e) {
             // Håndter fejl, hvis input ikke kan konverteres til et tal
             heightText = "Der skete en uventet fejl - prøv igen senere.";
