@@ -356,9 +356,7 @@ public class JFrameGUI extends JFrame {
                 String password = String.valueOf(passwordField.getPassword());
 
                 // Validate email and password
-                if (!email.isEmpty() && !password.isEmpty()
-                        && email.contains("@") && email.contains(".")
-                        && password.length() >= 8) {
+                if (!email.isEmpty() && !password.isEmpty() && email.contains("@") && email.contains(".") && password.length() >= 8) {
 
                     // Check if account with this email already exists
                     int accountWithThisEmail = 0;
@@ -490,8 +488,6 @@ public class JFrameGUI extends JFrame {
 
     @Override
     public String toString() {
-        return "JFrameGUI{" +
-                "acc=" + acc +
-                '}';
+        return "JFrameGUI{" + "acc=" + acc + '}';
     }
 }
