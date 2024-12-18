@@ -176,6 +176,14 @@ public class JFrameGUI extends JFrame {
 
         /* Order your tren now (MENU 3) */
         JPanel menu3 = createModernPanel("Order your Tren now!");
+        ImageIcon image2 = new ImageIcon("src/doc/docs/steroids_testosterone_cypionate_200m_0_0.jpg");
+        setIconImage(image2.getImage());
+        Image resizedImage = image2.getImage().getScaledInstance(320, 400, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        JLabel imageJPG = new JLabel(resizedIcon);
+        imageJPG.setHorizontalAlignment(SwingConstants.CENTER);
+        menu3.add(imageJPG);
+
         JButton buyTrenButton = createModernButton("Shop now!");
         menu3.add(buyTrenButton, BorderLayout.SOUTH);
         menu3.setBackground(new Color(29, 49, 53));
